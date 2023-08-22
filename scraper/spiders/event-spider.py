@@ -27,11 +27,11 @@ class EventSpider(scrapy.Spider):
     def parse_event(self, response):
         event_info = response.meta.get("event_info")
         event_data = {
-            "title": response.xpath(event_info['title']).extract(),
-            "description": response.xpath(event_info['description']).extract(),
+            "title": response.xpath(event_info['title']).get(),
+            "description": response.xpath(event_info['description']).get(),
             # "speaker": response.xpath(event_info['speaker']).get(),
-            "date": response.xpath(event_info['date']).extract(),
-            "venue": response.xpath(event_info['venue']).extract(),
+            "date": response.xpath(event_info['date']).get(),
+            "venue": response.xpath(event_info['venue']).get(),
         }
         print("event data", event_data)
         yield event_data
