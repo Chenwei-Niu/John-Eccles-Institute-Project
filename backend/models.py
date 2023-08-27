@@ -1,5 +1,5 @@
 from sqlalchemy import (
-    Integer, String, Date, DateTime, Float, Boolean, Text)
+    Integer, Text)
 from sqlalchemy import create_engine, Column
 from sqlalchemy.ext.declarative import declarative_base
 from scrapy.utils.project import get_project_settings
