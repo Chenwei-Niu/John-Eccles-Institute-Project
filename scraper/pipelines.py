@@ -32,7 +32,7 @@ class SaveToDatabase:
         event = Event()
         event.title = item["title"]
         event.description = item["description"]
-        #event.speaker = item["speaker"]
+        event.speaker = item["speaker"]
         event.venue = item["venue"]
         event.date = item["date"]
         try:
