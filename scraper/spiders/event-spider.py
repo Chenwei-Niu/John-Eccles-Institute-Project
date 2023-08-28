@@ -1,9 +1,7 @@
 import scrapy
 from scrapy import Request
 import scraper.config as config
-import nltk
-from nltk import ne_chunk, pos_tag, word_tokenize
-from nltk.tree import Tree
+import scraper.key_terms_extractor.Keywords_extractor as Keywords_extractor
 import spacy
 import re
 
@@ -39,8 +37,10 @@ class EventSpider(scrapy.Spider):
             "speaker": self.get_speaker(response,description,event_info),
             "date": response.xpath(event_info['date']).get(),
             "venue": response.xpath(event_info['venue']).get(),
+            "keywords":", ".join(Keywords_extractor.extract_keywords(description)),
         }
         # print("event data", event_data)
+        # print(Keywords_extractor.extract_keywords(description))
         yield event_data
 
     # The description could be several paragraphs

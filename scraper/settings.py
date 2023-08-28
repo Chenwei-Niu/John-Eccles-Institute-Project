@@ -102,3 +102,14 @@ CONNECTION_STRING = "{drivername}://{user}:{passwd}@{host}:{port}/{db_name}".for
      port="5432",
      db_name="jei",
 )
+
+# Setting for the key terms extractor
+# LINGUISTIC_FILTER: the linguistic filter, can be Noun or AdjNoun or AdjPrepNoun
+# MAX_LEN: the expected maximum length of a term
+# FREQUENCY_THRESHOLD: the frequency threshold
+# C_VALUE_THRESHOLD: the C-value threshold
+
+LINGUISTIC_FILTER = "Noun"
+MAX_LEN = 2
+FREQUENCY_THRESHOLD = 0
+C_VALUE_THRESHOLD = 1

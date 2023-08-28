@@ -24,3 +24,4 @@ class Event(Base):
     date = Column(Text())
     venue = Column(Text())
     speaker = Column(Text())
+    keywords = Column(Text())
