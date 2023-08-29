@@ -139,14 +139,14 @@ C_VALUE_THRESHOLD = 1
    - "computing school anu" is the customized name of new target website
    - "domain" is the domain of the website
    - "url" is the index page that containing many events that you can click into, here is an example
-     - ![image-20230829110219213](static\readme_images\image-20230829110219213.png)
+     - ![image-20230829110219213](/static/readme_images/image-20230829110219213.png)
    - "event_list" defines the xpath to get all events URL in this webpage, press F12 to use the devtool
    - "event_item" defines the xpath to get detailed webpage of an event
-     - ![image-20230829111038058](static\readme_images\image-20230829111038058.png)
+     - ![image-20230829111038058](/static/readme_images/image-20230829111038058.png)
    - "title" defines the XPATH of the seminar title
-     - ![image-20230829111717958](static\readme_images\image-20230829111717958.png)
+     - ![image-20230829111717958](/static/readme_images/image-20230829111717958.png)
    - "description" is always the XPATH involving Abstract and Biography. Here is an example:
-     - ![image-20230829111930872](static\readme_images\image-20230829111930872.png)
+     - ![image-20230829111930872](/static/readme_images/image-20230829111930872.png)
    - "venue" and "date" are straightforward, find the according XPATH and put it there
    - "speaker": If there is a clear html tag displaying the presenter, we use the XPATH. But sometimes, we cannot find the exact XPATH towards the presenter, in that case, we could leave it blank, and let our spider extract it from the description.
 
