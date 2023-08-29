@@ -4,7 +4,7 @@ import os
 from scrapy import cmdline
 def execute_crawler():
     os.system("scrapy crawl event-spider")
-    print("Crawl executed: "+ datetime.datetime.now())
+    print("Crawl executed: "+ str(datetime.datetime.now()))
 
 def go():
     execute_crawler()
