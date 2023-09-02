@@ -6,7 +6,7 @@
 
 # useful for handling different item types with a single interface
 from itemadapter import ItemAdapter
-from scraper.models import *
+from backend.models import *
 from sqlalchemy.orm import sessionmaker
 
 class ScraperPipeline:
