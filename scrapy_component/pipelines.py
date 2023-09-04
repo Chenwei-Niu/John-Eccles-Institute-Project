@@ -9,7 +9,7 @@ from itemadapter import ItemAdapter
 from backend.models import *
 from sqlalchemy.orm import sessionmaker
 
-class ScraperPipeline:
+class ScrapyComponentPipeline:
     def process_item(self, item, spider):
         return item
     

@@ -1,7 +1,7 @@
 import time
 import nltk
 starttime = time.time()
-from scraper.key_terms_extractor.Word_object import NoName
+from scrapy_component.key_terms_extractor.Word_object import NoName
 from scrapy.utils.project import get_project_settings
 import re
 noun = ['NN','NNS','NNP','NNPS']#tags of noun

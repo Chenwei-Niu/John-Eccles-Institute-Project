@@ -1,9 +1,10 @@
 from sqlalchemy import (
-    Integer, Text)
+    Integer, Text, Boolean)
 from sqlalchemy import create_engine, Column
 from sqlalchemy.ext.declarative import declarative_base
 from scrapy.utils.project import get_project_settings
-
+from sqlalchemy.dialects.postgresql import ARRAY
+from sqlalchemy import ForeignKey
 Base = declarative_base()
 
 
@@ -25,3 +26,14 @@ class Event(Base):
     venue = Column(Text())
     speaker = Column(Text())
     keywords = Column(Text())
+
+class Scholar(Base):
+    __tablename__ = "scholar"
+
+    name = Column(Text())
+    email = Column(Text(),  unique=True, primary_key=True)
+    interest = Column(ARRAY(Text()))
+    organization = Column(Text())
+    is_recipient = Column(Boolean(),default=False)
+    
+

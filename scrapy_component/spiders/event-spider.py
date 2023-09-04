@@ -1,7 +1,7 @@
 import scrapy
 from scrapy import Request
-import scraper.config as config
-import scraper.key_terms_extractor.Keywords_extractor as Keywords_extractor
+import scrapy_component.config as config
+import scrapy_component.key_terms_extractor.Keywords_extractor as Keywords_extractor
 import spacy
 import re
 
