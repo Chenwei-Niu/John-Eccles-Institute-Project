@@ -1,7 +1,8 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
 from models import *
 from sqlalchemy.orm import sessionmaker
 from fastapi.middleware.cors import CORSMiddleware
+from sqlalchemy.sql import text
 
 app = FastAPI()
 origins = ["*"]
@@ -25,3 +26,11 @@ async def root():
 @app.get("/get-events")
 async def read_events():
     return db.query(Event).all()
+
+@app.get("/search-events/")
+async def read_events(searchTerm: str | None):
+    print("params**** ",searchTerm)
+    q = db.query(Event).filter(text('event.search_vector @@ plainto_tsquery(:terms)'))
+    q = q.params(terms=searchTerm).all()
+    return q
+
