@@ -26,12 +26,13 @@ class Event(Base):
     venue = Column(Text())
     speaker = Column(Text())
     keywords = Column(Text())
+    organization = Column(Text())
 
-class Scholar(Base):
-    __tablename__ = "scholar"
-
+class Recipent(Base):
+    __tablename__ = "recipent"
+    id = Column(Integer, primary_key=True, autoincrement=True)
     name = Column(Text())
-    email = Column(Text(),  unique=True, primary_key=True)
+    email = Column(Text(),  unique=True)
     interest = Column(ARRAY(Text()))
     organization = Column(Text())
     is_recipient = Column(Boolean(),default=False)

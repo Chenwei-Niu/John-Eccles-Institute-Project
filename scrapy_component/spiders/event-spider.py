@@ -1,15 +1,16 @@
 import scrapy
 from scrapy import Request
+from scholar.Process_scholar import *
 import scrapy_component.config as config
 import scrapy_component.key_terms_extractor.Keywords_extractor as Keywords_extractor
 import spacy
 import re
 
 english_nlp = spacy.load('en_core_web_sm')
-
+scholar_helper = Process_scholar()
 class EventSpider(scrapy.Spider):
     name = config.SPIDER_NAME
-
+    
     def start_requests(self):
         for webpage in config.EVENTS_URLS:
             yield Request(config.EVENTS_URLS[webpage]["url"], callback=self.parse_event_list,
@@ -38,6 +39,7 @@ class EventSpider(scrapy.Spider):
             "date": response.xpath(event_info['date']).get(),
             "venue": response.xpath(event_info['venue']).get(),
             "keywords":", ".join(Keywords_extractor.extract_keywords(description)),
+            "organization": scholar_helper.get_organization(description),
         }
         # print("event data", event_data)
         # print(Keywords_extractor.extract_keywords(description))
@@ -63,7 +65,16 @@ class EventSpider(scrapy.Spider):
             return self.extract_human_name(response.xpath(event_info['speaker']).get())
         
     def get_speaker_spacy(self, description):
-        description = description.replace("\n"," ")
+        biography = ""
+        for format in biography_formats:
+            regexp_match = re.findall(format,description,flags=re.IGNORECASE)
+            if len(regexp_match) != 0:
+                biography = ' '.join(regexp_match)
+                break
+        if len(str.strip(biography)) != 0: # successfully get the biography
+            description = biography
+        else:
+            description = description.replace("\n"," ")
         temp_dict = dict()
         spacy_parser = english_nlp(description)
         for entity in spacy_parser.ents:

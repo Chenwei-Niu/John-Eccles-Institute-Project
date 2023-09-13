@@ -36,6 +36,7 @@ class SaveToDatabase:
         event.venue = item["venue"]
         event.date = item["date"]
         event.keywords = item["keywords"]
+        event.organization = item["organization"]
         try:
             session.add(event)
             session.commit()
