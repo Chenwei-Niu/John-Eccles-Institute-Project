@@ -2,7 +2,7 @@ import pandas as pd
 from typing import List
 import re
 from scholarly import scholarly
-from backend.models import Recipent
+from backend.models import Recipient
 from backend.models import *
 from sqlalchemy.orm import sessionmaker
 import spacy
@@ -26,20 +26,20 @@ class Process_scholar:
         self.Session = sessionmaker(bind=engine)
 
     
-    def add_recipent_from_email(self, data:pd.DataFrame): # add scholars from recipients list
+    def add_recipient_from_email(self, data:pd.DataFrame): # add scholars from recipients list
 
         for index, row in data.iterrows():
             session = self.Session()
-            recipent = Recipent()
+            recipient = Recipient()
             
-            recipent.email = str(row[0])
-            recipent.organization = str(row[1])
-            recipent.name = self.get_name_from_email(recipent.email)
-            recipent.interest = self.get_attributes(recipent.name,recipent.organization,"interests")
-            recipent.is_recipient = True # Set to true, since theses scholars are from recipients list
+            recipient.email = str(row[0])
+            recipient.organization = str(row[1])
+            recipient.name = self.get_name_from_email(recipient.email)
+            recipient.interest = self.get_attributes(recipient.name,recipient.organization,"interests")
+            recipient.is_recipient = True # Set to true, since theses scholars are from recipients list
                                     # For scholar added from events, this attribute should be set to false
             try:
-                session.add(recipent)
+                session.add(recipient)
                 session.commit()
 
             except:
@@ -84,7 +84,7 @@ class Process_scholar:
                 break
         return possible_scholars
     
-    # This function is for recipents only
+    # This function is for recipients only
     def get_attributes(self,name:str,organization:str,attribute:str):
 
         possible_scholars = self.get_candidates_by_name_and_org(name,organization)

@@ -24,7 +24,7 @@ def update_scholar():
         SCHOLAR_NUMBER = length
 
     if length > SCHOLAR_NUMBER:
-         ps.add_recipent_from_email(df.loc[SCHOLAR_NUMBER:length])
+         ps.add_recipient_from_email(df.loc[SCHOLAR_NUMBER:length])
          SCHOLAR_NUMBER = length
 
     

@@ -30,8 +30,8 @@ class Event(Base):
     keywords = Column(Text())
     organization = Column(Text())
 
-class Recipent(Base):
-    __tablename__ = "recipent"
+class Recipient(Base):
+    __tablename__ = "recipient"
     id = Column(Integer, primary_key=True, autoincrement=True)
     name = Column(Text())
     email = Column(Text(),  unique=True)
