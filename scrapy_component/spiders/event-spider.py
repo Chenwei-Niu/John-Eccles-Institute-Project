@@ -3,6 +3,7 @@ from scrapy import Request
 from scholar.Process_scholar import *
 import scrapy_component.config as config
 import scrapy_component.key_terms_extractor.Keywords_extractor as Keywords_extractor
+import scrapy_component.items as items
 import spacy
 import re
 
@@ -32,18 +33,24 @@ class EventSpider(scrapy.Spider):
     def parse_event(self, response):
         event_info = response.meta.get("event_info")
         description = self.get_description(response,event_info)
+        title = response.xpath(event_info['title']).get()
+        keywords = ", ".join(Keywords_extractor.extract_keywords(description))
+        scholar_object = self.scholar_object(response,description,event_info,keywords,title)
+
         event_data = {
-            "title": response.xpath(event_info['title']).get(),
+            "title": title,
             "description": description,
-            "speaker": self.get_speaker(response,description,event_info),
             "date": response.xpath(event_info['date']).get(),
             "venue": response.xpath(event_info['venue']).get(),
-            "keywords":", ".join(Keywords_extractor.extract_keywords(description)),
-            "organization": scholar_helper.get_organization(description),
+            "keywords":keywords,
+            "organization": scholar_object['organization'],
         }
         # print("event data", event_data)
         # print(Keywords_extractor.extract_keywords(description))
-        yield event_data
+        item = items.ScrapyComponentItem()
+        item["event"] = event_data
+        item["scholar"] = scholar_object
+        yield item
 
     # The description could be several paragraphs
     # This function is used to combine several paragraphs into one
@@ -56,15 +63,15 @@ class EventSpider(scrapy.Spider):
             description = ''.join(description)
         return description
     
-    def get_speaker(self, response, description, event_info):
+    def get_speaker(self, response, description, event_info,title):
         # if there is a presenter HTML tag, then use it
         # otherwise, extract it from description
         if event_info['speaker'].isspace() or len(event_info['speaker']) == 0:
-            return self.get_speaker_spacy(description) 
+            return self.get_speaker_spacy(description,title) 
         else:
             return self.extract_human_name(response.xpath(event_info['speaker']).get())
         
-    def get_speaker_spacy(self, description):
+    def get_speaker_spacy(self, description, title):
         biography = ""
         for format in biography_formats:
             regexp_match = re.findall(format,description,flags=re.IGNORECASE)
@@ -75,6 +82,9 @@ class EventSpider(scrapy.Spider):
             description = biography
         else:
             description = description.replace("\n"," ")
+
+        description = title + " " + description #In some websites, especially JCSMR, they put presenter's name in title
+
         temp_dict = dict()
         spacy_parser = english_nlp(description)
         for entity in spacy_parser.ents:
@@ -111,3 +121,27 @@ class EventSpider(scrapy.Spider):
             return name_list[0]
         else:
             return " & ".join(name_list)
+
+    def scholar_object(self,response,description:str,event_info,keywords,title):
+        name = self.get_speaker(response,description,event_info,title)
+        
+        scholar = scholar_helper.get_scholar_instance(name,keywords)
+        if (len(scholar) == 0): # cannot search such a person on Google Scholar
+            organization = scholar_helper.get_organization(description)
+            google_scholar_id = ""
+            interests = []
+        else:
+            if len(scholar["email_domain"]) > 0: # check if the person has email domain
+                organization = scholar["email_domain"].replace("@","")
+            else:
+                organization = "nan"
+            google_scholar_id = scholar["scholar_id"]
+            interests = scholar["interests"]
+
+        scholar_data = {
+            "name": name,
+            "google_scholar_id": google_scholar_id,
+            "interest": interests,
+            "organization": organization,
+        }
+        return scholar_data
