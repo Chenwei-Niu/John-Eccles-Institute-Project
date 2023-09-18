@@ -29,7 +29,6 @@ async def read_events():
 
 @app.get("/search-events/")
 async def read_events(searchTerm: str | None):
-    print("params**** ",searchTerm)
     q = db.query(Event).filter(text('event.search_vector @@ plainto_tsquery(:terms)'))
     q = q.params(terms=searchTerm).all()
     return q

@@ -14,3 +14,14 @@
     border: 2px solid;
     padding: 20px;
 }
+
+.form {
+  width: 100%;
+}
+
+.searchInput {
+    width: 100%;
+    height: 5vh;
+    border-radius: 15px;
+    padding: 15px;
+}
