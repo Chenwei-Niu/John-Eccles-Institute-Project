@@ -29,6 +29,7 @@ class Event(Base):
     # speaker:relationship("scholar", lazy="joined", cascade="all, delete-orphan")
     keywords = Column(Text())
     organization = Column(Text())
+    url = Column(Text())
 
 class Recipient(Base):
     __tablename__ = "recipient"

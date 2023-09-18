@@ -5,6 +5,7 @@ from scrapy import cmdline
 import time
 import pandas as pd
 from scholar import Process_scholar
+
 SCHOLAR_NUMBER = 0
 
 
@@ -21,6 +22,7 @@ def update_scholar():
     if length < SCHOLAR_NUMBER: # someone unsubscribes the email
         # need to modify database, make is_recipient attribute false
         # ....
+        ps.remove_recipient_from_email(df.loc[0:length])
         SCHOLAR_NUMBER = length
 
     if length > SCHOLAR_NUMBER:

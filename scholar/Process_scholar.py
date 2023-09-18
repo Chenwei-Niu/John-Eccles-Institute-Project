@@ -25,7 +25,24 @@ class Process_scholar:
         engine = db_connect()
         self.Session = sessionmaker(bind=engine)
 
-    
+    def remove_recipient_from_email(self,data:pd.DataFrame): # add scholars from recipients list
+        session = self.Session()
+        db_lst = session.query(Recipient).all()
+        csv_lst = []
+        for index, row in data.iterrows():
+            csv_lst.append(session.query(Recipient).filter(Recipient.email == str(row[0])).first())
+
+        for i in db_lst:
+            if i not in csv_lst:
+                session.query(Recipient).filter(Recipient.email == i.email).delete()
+                try:
+                    session.commit()
+
+                except:
+                    session.rollback()
+                continue
+            
+        session.close()
     def add_recipient_from_email(self, data:pd.DataFrame): # add scholars from recipients list
 
         for index, row in data.iterrows():

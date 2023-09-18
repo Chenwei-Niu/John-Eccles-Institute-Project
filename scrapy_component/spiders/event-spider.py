@@ -28,7 +28,7 @@ class EventSpider(scrapy.Spider):
             # some urls do not include the domain, if there isn't a scheme and domain, we add it on
             if page_config["domain"] not in url:
                 url = page_config["domain"] + url
-            yield Request(url, callback=self.parse_event, meta={"event_info": page_config['xpath']['event_info']})
+            yield Request(url, callback=self.parse_event, meta={"event_info": page_config['xpath']['event_info'], "url":url})
 
     def parse_event(self, response):
         event_info = response.meta.get("event_info")
@@ -36,7 +36,6 @@ class EventSpider(scrapy.Spider):
         title = response.xpath(event_info['title']).get()
         keywords = ", ".join(Keywords_extractor.extract_keywords(description))
         scholar_object = self.scholar_object(response,description,event_info,keywords,title)
-
         event_data = {
             "title": title,
             "description": description,
@@ -44,6 +43,7 @@ class EventSpider(scrapy.Spider):
             "venue": response.xpath(event_info['venue']).get(),
             "keywords":keywords,
             "organization": scholar_object['organization'],
+            "url":response.meta.get("url")
         }
         # print("event data", event_data)
         # print(Keywords_extractor.extract_keywords(description))
