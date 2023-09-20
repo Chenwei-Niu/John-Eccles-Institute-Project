@@ -11,7 +11,7 @@
    sudo apt-get -y install postgresql
    ```
 
-2. Install Node.js through this website https://nodejs.org/en/download/package-manager
+2. Install Node.js (18.16.0) through this website https://nodejs.org/en/download/package-manager
 
 3. Make sure we have Python3.6+ installed
 
@@ -52,19 +52,35 @@ pip install nltk
            IS_TEMPLATE = False;
        ```
 
-6. Run the web server by opening a terminal and type in
+6. Install backend dependencies:
+   ```bash
+   pip install uvicorn
+   pip install fastapi
+   ```
+
+7. Run backend server:
+   ```
+   cd backend
+   uvicorn main:app --reload
+   ```
+   
+8. Install npm packages
+   ```
+   cd frontend
+   npm i
+   ```
+
+9. Run the web server by the following command in the frontend dir (read more about it in frontend/README)
 
    ```
    npm run dev
    ```
 
-   
-
-7. cd into the project root directory, where "**scrapy.cfg**" locates, then cd into **scraper**
+10. cd into the project root directory, where "**scrapy.cfg**" locates, then cd into **scraper**
 
    Please open **settings.py**, and you need to modify the **user, passwd**  variables in **"CONNECTION_STRING"** according to your setup, so that you can get access to the database
 
-8. cd into the project root directory, where "**scrapy.cfg**" locates
+11. cd into the project root directory, where "**scrapy.cfg**" locates
 
    open a terminal in this directory and type in
 
@@ -76,7 +92,7 @@ pip install nltk
 
    The default crawl time is 17:00 on each Wednesday. You are free to change it in **schedule_execute.py** file.
 
-9. We strongly recommend you to install a GUI for PostgresSQL called pgAdmin if you are unfamiliar with writing SQL commands.
+12. We strongly recommend you to install a GUI for PostgresSQL called pgAdmin if you are unfamiliar with writing SQL commands.
 
 
 

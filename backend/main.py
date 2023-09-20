@@ -1,4 +1,4 @@
-from fastapi import FastAPI, Request
+from fastapi import FastAPI
 from models import *
 from sqlalchemy.orm import sessionmaker
 from fastapi.middleware.cors import CORSMiddleware
@@ -7,6 +7,7 @@ from sqlalchemy.sql import text
 app = FastAPI()
 origins = ["*"]
 
+#TODO: set appropiate CORS
 app.add_middleware(
     CORSMiddleware,
     allow_origins=origins,
