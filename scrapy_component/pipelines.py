@@ -50,6 +50,7 @@ class SaveToDatabase:
             event.keywords = item["event"]["keywords"]
             event.organization = item["event"]["organization"]
             event.url = item["event"]["url"]
+            event.access_date = item["event"]["access_date"]
             # event.speaker_id = scholar.id
 
             if exist_scholar is not None: # the scholar exists

@@ -5,6 +5,7 @@ from scrapy import cmdline
 import time
 import pandas as pd
 from scholar import Process_scholar
+from email_component.email_main import *
 
 SCHOLAR_NUMBER = 0
 
@@ -33,9 +34,12 @@ def update_scholar():
 def go():
     execute_crawler()
     update_scholar()
+    email_main = EmailMain()
+    email_main.verify()
     # modify this line if you want to change the schedule of crawling
     schedule.every().wednesday.at("17:00").do(execute_crawler)
-    # schedule.every().wednesday.at("17:00").do(update_scholar)
+    # schedule.every().wednesday.at("17:30").do(update_scholar)
+    # schedule.every().wednesday.at("18:00").do(email_main.verify())
     while True:
         schedule.run_pending()
 

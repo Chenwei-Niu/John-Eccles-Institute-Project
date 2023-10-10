@@ -1,3 +1,5 @@
+from datetime import datetime
+
 import scrapy
 from scrapy import Request
 from scholar.Process_scholar import *
@@ -22,13 +24,14 @@ class EventSpider(scrapy.Spider):
         page_config = config.EVENTS_URLS[webpage]
 
         event_list = response.xpath(page_config["xpath"]["event_list"])
+        curr_time = datetime.now()
         for event_item in event_list:
             # get the url based on the xpath
             url = event_item.xpath(page_config["xpath"]["event_item"]).get()
             # some urls do not include the domain, if there isn't a scheme and domain, we add it on
             if page_config["domain"] not in url:
                 url = page_config["domain"] + url
-            yield Request(url, callback=self.parse_event, meta={"event_info": page_config['xpath']['event_info'], "url":url})
+            yield Request(url, callback=self.parse_event, meta={"event_info": page_config['xpath']['event_info'], "url":url, "curr_time":curr_time})
 
     def parse_event(self, response):
         event_info = response.meta.get("event_info")
@@ -43,7 +46,8 @@ class EventSpider(scrapy.Spider):
             "venue": response.xpath(event_info['venue']).get(),
             "keywords":keywords,
             "organization": scholar_object['organization'],
-            "url":response.meta.get("url")
+            "url":response.meta.get("url"),
+            "access_date": response.meta.get("curr_time")
         }
         # print("event data", event_data)
         # print(Keywords_extractor.extract_keywords(description))
@@ -57,11 +61,11 @@ class EventSpider(scrapy.Spider):
     def get_description(self, response,event_info):
         description = response.xpath(event_info['description']).extract()
         description_length = len(description)
-        if ( description_length == 1):
+        if description_length == 1:
             description = description[0]
         else:
             description = ''.join(description)
-        return description
+        return Keywords_extractor.getAbstract(description)
     
     def get_speaker(self, response, description, event_info,title):
         # if there is a presenter HTML tag, then use it

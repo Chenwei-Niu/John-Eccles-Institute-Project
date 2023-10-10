@@ -1,5 +1,5 @@
 from sqlalchemy import (
-    Integer, Text, Boolean)
+    Integer, Text, Boolean, DateTime)
 from sqlalchemy import create_engine, Column
 from sqlalchemy.ext.declarative import declarative_base
 from scrapy.utils.project import get_project_settings
@@ -30,6 +30,7 @@ class Event(Base):
     keywords = Column(Text())
     organization = Column(Text())
     url = Column(Text())
+    access_date = Column(DateTime(timezone=True))
 
 class Recipient(Base):
     __tablename__ = "recipient"

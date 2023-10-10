@@ -22,9 +22,9 @@ class RecommenderSystem:
                     if simi > threshold:
                         print(recipient.name + ": " + interest + ", " + keyword + ", " + str(simi))
                         if interested_seminar_dict.get(recipient.id):
-                            interested_seminar_dict.get(recipient.id).append(event.title)
+                            interested_seminar_dict.get(recipient.id).append(event.id)
                         else:
-                            interested_seminar_dict[recipient.id] = [event.title]
+                            interested_seminar_dict[recipient.id] = [event.id]
                         return
 
         event_lst = (self.db.query(Event.id, Event.title, Event.keywords, Scholar.interest).join(Scholar).filter(
@@ -40,3 +40,4 @@ class RecommenderSystem:
                 loopEachRecipient()
 
         print(interested_seminar_dict)
+        return interested_seminar_dict

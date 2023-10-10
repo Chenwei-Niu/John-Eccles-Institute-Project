@@ -1,4 +1,5 @@
 from email_component.email_main import *
-recipients = ['917840569@qq.com']
+recipients = ['u7377070@anu.edu.au']
 email_main = EmailMain()
-email_main.send(recipients)
+email_main.verify()
+# email_main.send(recipients)
