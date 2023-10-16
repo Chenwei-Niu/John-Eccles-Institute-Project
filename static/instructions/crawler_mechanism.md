@@ -16,17 +16,17 @@ The folder `scrapy_component` and file `scrapy.cfg` are crucial in Scrapy framew
 
 In this file, it contains the spider name and a list of websites containing events.
 
-![image-20231017073807246](D:\ANU Courses\COMP8755 Individual Computing Project\JEI_remote\static\readme_images\crawler_machanism_1.png)
+![image-20231017073807246](../readme_images/crawler_mechanism_1.png)
 
 ### 1.2.2 scrapy_component/settings
 
 This file contains many useful properties and parameters adjusting the performance of crawler. These screenshots include significant attributes that the maintainer should know.
 
-![image-20231017074421634](D:\ANU Courses\COMP8755 Individual Computing Project\JEI_remote\static\readme_images\crawler_machanism_2.png)
+![image-20231017074421634](../readme_images/crawler_mechanism_2.png)
 
-![image-20231017074643053](D:\ANU Courses\COMP8755 Individual Computing Project\JEI_remote\static\readme_images\crawler_machanism_3.png)
+![image-20231017074643053](../readme_images/crawler_mechanism_3.png)
 
-![image-20231017074908515](D:\ANU Courses\COMP8755 Individual Computing Project\JEI_remote\static\readme_images\crawler_machanism_4.png)
+![image-20231017074908515](../readme_images/crawler_mechanism_4.png)
 
 ### 1.2.3 scrapy_component/spiders/event-spider
 
