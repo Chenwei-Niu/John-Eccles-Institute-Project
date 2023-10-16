@@ -119,7 +119,7 @@ class Process_scholar:
                 # the algorithm using C-value methods and word2Vec
                 # to be completed....
                 return []
-        else:  # there is no such a person on google scholar
+        else:  # there is no such a person on Google Scholar
             return []
 
     # This Function is for external scholar
@@ -148,7 +148,7 @@ class Process_scholar:
 
             index = max(temp_dict, key=temp_dict.get)
             return possible_scholars[index]
-        else:  # there is no such a person on google scholar
+        else:  # there is no such a person on Google Scholar
             return {}
 
     def get_organization(self, description: str):

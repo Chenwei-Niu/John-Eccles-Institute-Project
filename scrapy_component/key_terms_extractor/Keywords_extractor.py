@@ -54,17 +54,20 @@ def extract_keywords(f: str):
                 word_next = NoName();
                 word_next.word(pos_tagged[i + 1])
                 if word_next.tag in noun:
-                    noun_ind.append(i + 1); i += 2
+                    noun_ind.append(i + 1);
+                    i += 2
                 elif word_next.tag in adj:
                     i += 2
                 else:
-                    end = i + 1; break
+                    end = i + 1;
+                    break
             elif (lingui_filter == 'AdjPrepNoun') and not pre_exist and i != 0 and (word.tag in pre):
                 pre_ind.append(i)
                 pre_exist = True
                 i += 1
             else:
-                end = i; break
+                end = i;
+                break
         # print(1111)
         if len(noun_ind) != 0:
             for i in list(set(range(start, noun_ind[-1])) - set(pre_ind)):
@@ -109,7 +112,7 @@ def extract_keywords(f: str):
 
     Term.sort(key=lambda x: x.CValue, reverse=True)
     keywords_lst = []
-    for i in Term[0:5]:
+    for i in Term[0:5]:  # Only get the first 5
         keywords_lst.append(' '.join(i.words))
     return keywords_lst
 
