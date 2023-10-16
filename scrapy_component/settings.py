@@ -1,4 +1,4 @@
-# Scrapy settings for scraper project
+# Scrapy settings for ScrapyComponent project
 #
 # For simplicity, this file contains only settings considered important or
 # commonly used. You can find more settings consulting the documentation:
@@ -7,10 +7,10 @@
 #     https://docs.scrapy.org/en/latest/topics/downloader-middleware.html
 #     https://docs.scrapy.org/en/latest/topics/spider-middleware.html
 
-BOT_NAME = "scraper"
+BOT_NAME = "scrapy_component"
 
-SPIDER_MODULES = ["scraper.spiders"]
-NEWSPIDER_MODULE = "scraper.spiders"
+SPIDER_MODULES = ["scrapy_component.spiders"]
+NEWSPIDER_MODULE = "scrapy_component.spiders"
 
 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
@@ -46,13 +46,13 @@ LOG_LEVEL = 'ERROR'
 # Enable or disable spider middlewares
 # See https://docs.scrapy.org/en/latest/topics/spider-middleware.html
 #SPIDER_MIDDLEWARES = {
-#    "scraper.middlewares.ScraperSpiderMiddleware": 543,
+#    "ScrapyComponent.middlewares.ScrapyComponentSpiderMiddleware": 543,
 #}
 
 # Enable or disable downloader middlewares
 # See https://docs.scrapy.org/en/latest/topics/downloader-middleware.html
 #DOWNLOADER_MIDDLEWARES = {
-#    "scraper.middlewares.ScraperDownloaderMiddleware": 543,
+#    "ScrapyComponent.middlewares.ScrapyComponentDownloaderMiddleware": 543,
 #}
 
 # Enable or disable extensions
@@ -64,8 +64,8 @@ LOG_LEVEL = 'ERROR'
 # Configure item pipelines
 # See https://docs.scrapy.org/en/latest/topics/item-pipeline.html
 ITEM_PIPELINES = {
-   "scraper.pipelines.ScraperPipeline": 300,
-   "scraper.pipelines.SaveToDatabase": 400
+   "scrapy_component.pipelines.ScrapyComponentPipeline": 300,
+   "scrapy_component.pipelines.SaveToDatabase": 400
 }
 
 # Enable and configure the AutoThrottle extension (disabled by default)

@@ -1,9 +1,11 @@
 from sqlalchemy import (
-    Integer, Text)
+    Integer, Text, Boolean, DateTime)
 from sqlalchemy import create_engine, Column, event, DDL, func
 from sqlalchemy.ext.declarative import declarative_base
 from scrapy.utils.project import get_project_settings
-
+from sqlalchemy.dialects.postgresql import ARRAY
+from sqlalchemy import ForeignKey
+from sqlalchemy.orm import *
 Base = declarative_base()
 
 
@@ -23,8 +25,32 @@ class Event(Base):
     description = Column(Text())
     date = Column(Text())
     venue = Column(Text())
-    speaker = Column(Text())
+    speaker = Column(Integer,ForeignKey("scholar.id"))
+    # speaker:relationship("scholar", lazy="joined", cascade="all, delete-orphan")
     keywords = Column(Text())
+    organization = Column(Text())
+    url = Column(Text())
+    access_date = Column(DateTime(timezone=True))
+
+class Recipient(Base):
+    __tablename__ = "recipient"
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    name = Column(Text())
+    email = Column(Text(),  unique=True)
+    interest = Column(ARRAY(Text()))
+    organization = Column(Text())
+    is_recipient = Column(Boolean(),default=False)
+
+class Scholar(Base):
+    __tablename__ = "scholar"
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    name = Column(Text())
+    google_scholar_id = Column(Text())
+    interest = Column(ARRAY(Text()))
+    organization = Column(Text())
+    events = relationship('Event', backref='scholar')
+    
+
 
 
 search_vector_trigger = DDL("""create trigger event_entry_search_update before update or insert on event for 

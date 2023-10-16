@@ -6,7 +6,8 @@
 import scrapy
 
 
-class ScraperItem(scrapy.Item):
+class ScrapyComponentItem(scrapy.Item):
     # define the fields for your item here like:
-    # name = scrapy.Field()
+    event = scrapy.Field()
+    scholar = scrapy.Field()
     pass

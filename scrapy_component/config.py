@@ -8,7 +8,7 @@ EVENTS_URLS = {
             "event_item": './div[1]/a/@href',
             "event_info": {
                 "title": '//*[@id="page-title"]/text()',
-                "description": '//*[@id="block-system-main"]/div/div/div/div[1]/div/div[5]/div/div/div/div//text()',
+                "description": '//div[@class="panel-pane pane-node-body"]//text()',
                 "speaker": "",
                 "date": '//div[@class="panel-pane pane-entity-field pane-node-field-date-time brd-label marginbottom"]/div/div/div//text()',
                 "venue": '//div[@class="panel-pane pane-entity-field pane-node-field-location marginbottom"]//p/text()',
@@ -24,8 +24,7 @@ EVENTS_URLS = {
             "event_info": {
                 "title": '//*[@id="page-title"]/text()',
                 "description": '//*[@id="block-system-main"]/div/div/div/div[1]/div/div[5]/div/div/div/div//text()',
-                "speaker": '//div[@class="field field-name-body field-type-text-with-summary field-label-hidden"]/div/div/h3[1]/text() | \
-                    //div[@class="field field-name-body field-type-text-with-summary field-label-hidden"]/div/div/h4[1]/text()',
+                "speaker": '',
                 "date": '//div[@class="panel-pane pane-entity-field pane-node-field-date-time brd-label marginbottom"]/div/div/div//text()',
                 "venue": '//div[@class="panel-pane pane-entity-field pane-node-field-location marginbottom"]//p/text()',
             }

@@ -1,3 +1,4 @@
 **/__pycache__/
-/scraper/output/
+/scrapy_component/output/
 .vs
+.idea

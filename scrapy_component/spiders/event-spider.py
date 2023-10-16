@@ -1,15 +1,19 @@
+from datetime import datetime
+
 import scrapy
 from scrapy import Request
-import scraper.config as config
-import scraper.key_terms_extractor.Keywords_extractor as Keywords_extractor
+from scholar.Process_scholar import *
+import scrapy_component.config as config
+import scrapy_component.key_terms_extractor.Keywords_extractor as Keywords_extractor
+import scrapy_component.items as items
 import spacy
 import re
 
 english_nlp = spacy.load('en_core_web_sm')
-
+scholar_helper = Process_scholar()
 class EventSpider(scrapy.Spider):
     name = config.SPIDER_NAME
-
+    
     def start_requests(self):
         for webpage in config.EVENTS_URLS:
             yield Request(config.EVENTS_URLS[webpage]["url"], callback=self.parse_event_list,
@@ -20,50 +24,71 @@ class EventSpider(scrapy.Spider):
         page_config = config.EVENTS_URLS[webpage]
 
         event_list = response.xpath(page_config["xpath"]["event_list"])
+        curr_time = datetime.now()
         for event_item in event_list:
             # get the url based on the xpath
             url = event_item.xpath(page_config["xpath"]["event_item"]).get()
             # some urls do not include the domain, if there isn't a scheme and domain, we add it on
             if page_config["domain"] not in url:
                 url = page_config["domain"] + url
-            yield Request(url, callback=self.parse_event, meta={"event_info": page_config['xpath']['event_info']})
+            yield Request(url, callback=self.parse_event, meta={"event_info": page_config['xpath']['event_info'], "url":url, "curr_time":curr_time})
 
     def parse_event(self, response):
         event_info = response.meta.get("event_info")
         description = self.get_description(response,event_info)
+        title = response.xpath(event_info['title']).get()
+        keywords = ", ".join(Keywords_extractor.extract_keywords(description))
+        scholar_object = self.scholar_object(response,description,event_info,keywords,title)
         event_data = {
-            "title": response.xpath(event_info['title']).get(),
+            "title": title,
             "description": description,
-            "speaker": self.get_speaker(response,description,event_info),
             "date": response.xpath(event_info['date']).get(),
             "venue": response.xpath(event_info['venue']).get(),
-            "keywords":", ".join(Keywords_extractor.extract_keywords(description)),
+            "keywords":keywords,
+            "organization": scholar_object['organization'],
+            "url":response.meta.get("url"),
+            "access_date": response.meta.get("curr_time")
         }
         # print("event data", event_data)
         # print(Keywords_extractor.extract_keywords(description))
-        yield event_data
+        item = items.ScrapyComponentItem()
+        item["event"] = event_data
+        item["scholar"] = scholar_object
+        yield item
 
     # The description could be several paragraphs
     # This function is used to combine several paragraphs into one
     def get_description(self, response,event_info):
         description = response.xpath(event_info['description']).extract()
         description_length = len(description)
-        if ( description_length == 1):
+        if description_length == 1:
             description = description[0]
         else:
             description = ''.join(description)
-        return description
+        return Keywords_extractor.getAbstract(description)
     
-    def get_speaker(self, response, description, event_info):
+    def get_speaker(self, response, description, event_info,title):
         # if there is a presenter HTML tag, then use it
         # otherwise, extract it from description
         if event_info['speaker'].isspace() or len(event_info['speaker']) == 0:
-            return self.get_speaker_spacy(description) 
+            return self.get_speaker_spacy(description,title) 
         else:
             return self.extract_human_name(response.xpath(event_info['speaker']).get())
         
-    def get_speaker_spacy(self, description):
-        description = description.replace("\n"," ")
+    def get_speaker_spacy(self, description, title):
+        biography = ""
+        for format in biography_formats:
+            regexp_match = re.findall(format,description,flags=re.IGNORECASE)
+            if len(regexp_match) != 0:
+                biography = ' '.join(regexp_match)
+                break
+        if len(str.strip(biography)) != 0: # successfully get the biography
+            description = biography
+        else:
+            description = description.replace("\n"," ")
+
+        description = title + " " + description #In some websites, especially JCSMR, they put presenter's name in title
+
         temp_dict = dict()
         spacy_parser = english_nlp(description)
         for entity in spacy_parser.ents:
@@ -100,3 +125,27 @@ class EventSpider(scrapy.Spider):
             return name_list[0]
         else:
             return " & ".join(name_list)
+
+    def scholar_object(self,response,description:str,event_info,keywords,title):
+        name = self.get_speaker(response,description,event_info,title)
+        
+        scholar = scholar_helper.get_scholar_instance(name,keywords)
+        if (len(scholar) == 0): # cannot search such a person on Google Scholar
+            organization = scholar_helper.get_organization(description)
+            google_scholar_id = ""
+            interests = []
+        else:
+            if len(scholar["email_domain"]) > 0: # check if the person has email domain
+                organization = scholar["email_domain"].replace("@","")
+            else:
+                organization = "nan"
+            google_scholar_id = scholar["scholar_id"]
+            interests = scholar["interests"]
+
+        scholar_data = {
+            "name": name,
+            "google_scholar_id": google_scholar_id,
+            "interest": interests,
+            "organization": organization,
+        }
+        return scholar_data
