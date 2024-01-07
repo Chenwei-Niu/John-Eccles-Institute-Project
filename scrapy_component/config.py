@@ -39,9 +39,9 @@ EVENTS_URLS = {
             "event_info": {
                 "title": '//*[@id="main-content"]/header/h1/text()',
                 "description": '//*[@id="skip-toc-target"]//text()',
-                "speaker": "",
-                "date": '//*[@id="skip-toc-target"]/p[1]/text()',
-                "venue": '//*[@id="skip-toc-target"]/p[2]/text()',
+                "speaker": '//*[@id="main-content"]/header/p[1]//text()',
+                "date": '//*[@id="main-content"]/header/div/div/article[1]//text()',
+                "venue": '//*[@id="main-content"]/header/div/div/article[2]//text()',
             }
         }
     }

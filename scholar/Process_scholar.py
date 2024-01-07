@@ -1,7 +1,7 @@
 import pandas as pd
 from typing import List
 import re
-from scholarly import scholarly
+from scholarly import scholarly, ProxyGenerator
 from backend.models import Recipient
 from backend.models import *
 from sqlalchemy.orm import sessionmaker
@@ -19,7 +19,9 @@ biography_formats = [
 ]
 
 university_feature_words = ["University", "College", "Uni", "U", "Institution", "of", "Institute"]
-
+pg = ProxyGenerator()
+pg.FreeProxies()
+scholarly.use_proxy(pg)
 
 class Process_scholar:
     def __init__(self):

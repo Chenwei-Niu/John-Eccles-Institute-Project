@@ -16,8 +16,9 @@ Once finished, with a printed string indicating the end of current crawling
 
 
 def execute_crawler():
+    print("Crawl start: " + str(datetime.datetime.now()))
     os.system("scrapy crawl event-spider")
-    print("Crawl executed: " + str(datetime.datetime.now()))
+    print("Crawl finished: " + str(datetime.datetime.now()))
 
 
 """

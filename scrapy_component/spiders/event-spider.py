@@ -1,5 +1,5 @@
 from datetime import datetime
-
+from scrapy_component.data_filter.data_clean import Data_Cleaner
 import scrapy
 from scrapy import Request
 from scholar.Process_scholar import *
@@ -11,6 +11,7 @@ import re
 
 english_nlp = spacy.load('en_core_web_sm')
 scholar_helper = Process_scholar()
+data_cleaner = Data_Cleaner()
 class EventSpider(scrapy.Spider):
     name = config.SPIDER_NAME
     
@@ -35,22 +36,24 @@ class EventSpider(scrapy.Spider):
 
     def parse_event(self, response):
         event_info = response.meta.get("event_info")
-        description = self.get_description(response,event_info)
         title = response.xpath(event_info['title']).get()
+        description, is_seminar = self.get_description(response,event_info,title)
         keywords = ", ".join(Keywords_extractor.extract_keywords(description))
         scholar_object = self.scholar_object(response,description,event_info,keywords,title)
         event_data = {
             "title": title,
-            "description": description,
-            "date": response.xpath(event_info['date']).get(),
+            "description": description.strip(),
+            "date": ''.join(response.xpath(event_info['date']).extract()),
             "venue": response.xpath(event_info['venue']).get(),
             "keywords":keywords,
             "organization": scholar_object['organization'],
             "url":response.meta.get("url"),
-            "access_date": response.meta.get("curr_time")
+            "access_date": response.meta.get("curr_time"),
+            "is_seminar": is_seminar
         }
-        # print("event data", event_data)
+         # print("event data", event_data)
         # print(Keywords_extractor.extract_keywords(description))
+        event_data = data_cleaner.clean_event_data(event_data) # Clean data
         item = items.ScrapyComponentItem()
         item["event"] = event_data
         item["scholar"] = scholar_object
@@ -58,14 +61,15 @@ class EventSpider(scrapy.Spider):
 
     # The description could be several paragraphs
     # This function is used to combine several paragraphs into one
-    def get_description(self, response,event_info):
+    def get_description(self, response,event_info,title):
         description = response.xpath(event_info['description']).extract()
         description_length = len(description)
         if description_length == 1:
             description = description[0]
         else:
             description = ''.join(description)
-        return Keywords_extractor.getAbstract(description)
+        is_seminar = self.determine_event_type(description,title) # Determine whether this event is a seminar
+        return Keywords_extractor.getAbstract(description), is_seminar
     
     def get_speaker(self, response, description, event_info,title):
         # if there is a presenter HTML tag, then use it
@@ -129,7 +133,12 @@ class EventSpider(scrapy.Spider):
     def scholar_object(self,response,description:str,event_info,keywords,title):
         name = self.get_speaker(response,description,event_info,title)
         
-        scholar = scholar_helper.get_scholar_instance(name,keywords)
+        # try: # Scholarly: exceeding maximum number of tries, the Google Scholar tempororily banned current IP
+        #     scholar = scholar_helper.get_scholar_instance(name,keywords)
+        # except:
+        #     scholar = {}
+        scholar = {} # Test purpose only, delete after test
+
         if (len(scholar) == 0): # cannot search such a person on Google Scholar
             organization = scholar_helper.get_organization(description)
             google_scholar_id = ""
@@ -149,3 +158,25 @@ class EventSpider(scrapy.Spider):
             "organization": organization,
         }
         return scholar_data
+    
+    # Determine if an event is a seminar or a workshop like event
+    # The criteria is based on keyword 
+    event_type_keyword = [
+        'seminar',
+        'talk',
+        'lecture',
+        'abstract',
+        'speaker',
+        'presenter',
+        'biography',
+        'bio'
+    ]
+    def determine_event_type(self,content:str,title:str):
+        title_content = content + title
+        regex = re.compile('|'.join(self.event_type_keyword), re.IGNORECASE)
+        match = regex.search(title_content,re.IGNORECASE)
+        if match:
+            return True
+        else:
+            return False
+        

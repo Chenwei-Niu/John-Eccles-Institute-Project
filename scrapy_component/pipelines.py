@@ -16,7 +16,7 @@ class ScrapyComponentPipeline:
 
 
 class SaveToDatabase:
-    def __init__(self):
+    def __init__(self) -> None:
         """
         Initializes database connection and sessionmaker
         Creates tables
@@ -25,7 +25,7 @@ class SaveToDatabase:
         create_table(engine)
         self.Session = sessionmaker(bind=engine)
 
-    def process_item(self, item, spider):
+    def process_item(self, item, spider):# -> Any:
         """Save quotes in the database
         This method is called for every item pipeline component
         """
@@ -53,15 +53,19 @@ class SaveToDatabase:
             event.organization = item["event"]["organization"]
             event.url = item["event"]["url"]
             event.access_date = item["event"]["access_date"]
+            event.is_seminar = item["event"]["is_seminar"]
             # event.speaker_id = scholar.id
 
             if exist_scholar is not None:  # the scholar exists
                 event.speaker = exist_scholar.id
             else:
+                print("scholar.id is "+ str(scholar.id) )
+                print(type(scholar.id))
                 event.speaker = scholar.id
 
             try:
                 session.add(event)
+                session.flush()
                 session.commit()
 
             except:
