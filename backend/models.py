@@ -40,7 +40,7 @@ class Recipient(Base):
     email = Column(Text(),  unique=True)
     interest = Column(ARRAY(Text()))
     organization = Column(Text())
-    is_recipient = Column(Boolean(),default=False)
+    is_recipient = Column(Boolean(),default=True)
 
 class Scholar(Base):
     __tablename__ = "scholar"
@@ -54,12 +54,12 @@ class Scholar(Base):
 
 
 
-# search_vector_trigger = DDL("""create trigger event_entry_search_update before update or insert on event for 
-#                             each row execute procedure tsvector_update_trigger('search_vector', 'pg_catalog.english', 
-#                                           'description', 'title', 'speaker', 'venue', 'date')""")
+search_vector_trigger = DDL("""create trigger event_entry_search_update before update or insert on event for 
+                            each row execute procedure tsvector_update_trigger('search_vector', 'pg_catalog.english', 
+                                          'description', 'title', 'speaker', 'venue', 'date')""")
 
-# event.listen(Event.__table__, 'after_create', DDL("alter table event add column search_vector tsvector"))
-# event.listen(Event.__table__, 'after_create',  DDL("""create index event_entries_search_index on event using gin(search_vector)"""))
-# event.listen(Event.__table__, 'after_create', search_vector_trigger)
+event.listen(Event.__table__, 'after_create', DDL("alter table event add column search_vector tsvector"))
+event.listen(Event.__table__, 'after_create',  DDL("""create index event_entries_search_index on event using gin(search_vector)"""))
+event.listen(Event.__table__, 'after_create', search_vector_trigger)
 
 

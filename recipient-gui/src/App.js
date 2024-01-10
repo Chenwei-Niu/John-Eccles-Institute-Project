@@ -1,18 +1,30 @@
 import logo from './logo.svg';
 import './App.css';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import TableComponent from './components/TableComponent';
 import SearchComponent from './components/SearchComponent';
-function App() {
-  const [originalData, setOriginalData] = useState([
-    { id: 1, email: 'user1@example.com', organization: 'Org A' },
-    { id: 2, email: 'user2@example.com', organization: 'Org B' },
-    // ... more data
-  ]);
+import AddRecipientComponent from './components/AddRecipientComponent';
+import axios from 'axios';
 
+function App() {
+  const [originalData, setOriginalData] = useState([]);
   const [filteredData, setFilteredData] = useState([]);
 
+  useEffect(()=>{
+    fetchData();
+  }, [])
+
+  const fetchData = async () => {
+    try {
+      const response = await axios.get('http://localhost:3001/users/data');
+      setOriginalData(response.data);
+    } catch (error) {
+      console.error('Error fetching data from API', error);
+    }
+  };
+
   const handleSearch = (searchTerm) => {
+    fetchData();
     // Implement your search logic and update the filtered data in the state
     const filteredResults = originalData.filter(
       (row) =>
@@ -28,6 +40,7 @@ function App() {
         <h1>Recipient Management</h1>
         <SearchComponent onSearch={handleSearch} />
         <TableComponent data={filteredData.length > 0 ? filteredData : originalData} />
+        <AddRecipientComponent refreshTable={fetchData}/>
       </div>
     </div>
   );
