@@ -84,11 +84,18 @@ class Process_scholar:
             query = '"' + name + '", ' + organization
 
         search_query = scholarly.search_author(query)
+        query_limit = 20
         possible_scholars = []
         while True:
+            pg.FreeProxies()
+            scholarly.use_proxy(pg)
             try:
                 scholar_result = next(search_query)
+                time.sleep(0.08)
                 possible_scholars.append(scholar_result)
+                query_limit -= 1
+                if query_limit <= 0:
+                    break
             except StopIteration:
                 break
         return possible_scholars
