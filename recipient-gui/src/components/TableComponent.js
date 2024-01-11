@@ -7,8 +7,20 @@ const TableComponent = ({data, refreshTable}) => {
 
   const columns = useMemo(
     () => [
+      { Header: 'Name', accessor: 'name' },
       { Header: 'Email', accessor: 'email' },
       { Header: 'Organization', accessor: 'organization' },
+      {
+        Header: 'Interests',
+        accessor: 'interest',
+        Cell: ({ row }) => (
+          <div>
+            {Array.isArray(row.original.interest)
+              ? row.original.interest.join(', ')
+              : row.original.interest}
+          </div>
+        ),
+      },
       {
         Header: 'Actions',
         accessor: 'actions',

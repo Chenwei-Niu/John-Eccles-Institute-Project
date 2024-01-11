@@ -1,4 +1,5 @@
 import pandas as pd
+import time
 from typing import List
 import re
 from scholarly import scholarly, ProxyGenerator
@@ -20,8 +21,6 @@ biography_formats = [
 
 university_feature_words = ["University", "College", "Uni", "U", "Institution", "of", "Institute"]
 pg = ProxyGenerator()
-pg.FreeProxies()
-scholarly.use_proxy(pg)
 
 class Process_scholar:
     def __init__(self):
@@ -97,11 +96,18 @@ class Process_scholar:
     def get_candidates_by_name(self, name: str):
         query = '"' + name + '"'
         search_query = scholarly.search_author(query)
+        query_limit = 20
         possible_scholars = []
         while True:
+            pg.FreeProxies()
+            scholarly.use_proxy(pg)
             try:
                 scholar_result = next(search_query)
+                time.sleep(0.08)
                 possible_scholars.append(scholar_result)
+                query_limit -= 1
+                if query_limit <= 0:
+                    break
             except StopIteration:
                 break
         return possible_scholars
@@ -129,6 +135,7 @@ class Process_scholar:
 
         possible_scholars = self.get_candidates_by_name(name)
         schoalar_list_length = len(possible_scholars)
+        print("Length of candidates list is", schoalar_list_length)
         if schoalar_list_length == 1:  # only one result, that's the person
             # print(possible_scholars[0]['interests'])
             return possible_scholars[0]
@@ -137,6 +144,7 @@ class Process_scholar:
             for k in possible_scholars:  # we give ANU people priority
                 if "anu" in k["email_domain"]:
                     return k
+            print("No one is from ANU")
             possible_scholars = possible_scholars[0:2]
             # If this professor not an ANU researcher, then conduct the word2Vector comparison
             temp_dict = {}
@@ -149,6 +157,8 @@ class Process_scholar:
                 temp_dict[i] = search_doc_nouns.similarity(main_doc_nouns)
 
             index = max(temp_dict, key=temp_dict.get)
+            print(temp_dict)
+            print(index)
             return possible_scholars[index]
         else:  # there is no such a person on Google Scholar
             return {}
