@@ -39,7 +39,7 @@ function App() {
       <div>
         <h1>Recipient Management</h1>
         <SearchComponent onSearch={handleSearch} />
-        <TableComponent data={filteredData.length > 0 ? filteredData : originalData} />
+        <TableComponent data={filteredData.length > 0 ? filteredData : originalData} refreshTable={fetchData}/>
         <AddRecipientComponent refreshTable={fetchData}/>
       </div>
     </div>

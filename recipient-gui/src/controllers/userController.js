@@ -36,10 +36,24 @@ const fetchUserData = async (req, res) => {
           console.error('Error querying database', error);
           res.status(500).json({ error: 'Internal Server Error' });
         }
-      }
+    }
+}
+
+const deleteUser = async (req, res) => {
+    {
+        const id = req.body.id;
+        try {
+          const result = await pool.query('DELETE FROM recipient WHERE id = $1 RETURNING *',[id]);
+          res.json(result.rows[0]);
+        } catch (error) {
+          console.error('Error querying database', error);
+          res.status(500).json({ error: 'Internal Server Error' });
+        }
+    }
 }
 
 module.exports = {
   insertUser,
-  fetchUserData
+  fetchUserData,
+  deleteUser
 };
