@@ -49,7 +49,7 @@ execute crawling and schedule the crawling routine
 """
 def go():
     execute_crawler()
-    update_scholar()
+    # update_scholar()
     email_main = EmailMain()
     email_main.verify()
     # modify this line if you want to change the schedule of crawling

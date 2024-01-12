@@ -18,6 +18,8 @@ biography_formats = [
     r'Bio\s?:?\s?(.*)',
     r'Bio\s?:?\s?\n+(.*)',
 ]
+SCHOLAR_QUERY_LIMIT = 20
+RECIPIENT_QUERY_LIMIT = 10
 
 university_feature_words = ["University", "College", "Uni", "U", "Institution", "of", "Institute"]
 pg = ProxyGenerator()
@@ -77,14 +79,13 @@ class Process_scholar:
         else:
             return ""
 
-    def get_candidates_by_name_and_org(self, name: str, organization: str):
+    def get_candidates_by_name_and_org(self, name: str, organization: str, query_limit:int):
         if organization == "nan":
             query = '"' + name + '"'
         else:
             query = '"' + name + '", ' + organization
 
         search_query = scholarly.search_author(query)
-        query_limit = 20
         possible_scholars = []
         while True:
             pg.FreeProxies()
@@ -100,10 +101,9 @@ class Process_scholar:
                 break
         return possible_scholars
 
-    def get_candidates_by_name(self, name: str):
+    def get_candidates_by_name(self, name: str, query_limit:int):
         query = '"' + name + '"'
         search_query = scholarly.search_author(query)
-        query_limit = 20
         possible_scholars = []
         while True:
             pg.FreeProxies()
@@ -122,7 +122,7 @@ class Process_scholar:
     # This function is for recipients only
     def get_attributes(self, name: str, organization: str, attribute: str):
 
-        possible_scholars = self.get_candidates_by_name_and_org(name, organization)
+        possible_scholars = self.get_candidates_by_name_and_org(name, organization, SCHOLAR_QUERY_LIMIT)
         schoalar_list_length = len(possible_scholars)
         if schoalar_list_length == 1:  # only one result, that's the person
             # print(possible_scholars[0]['interests'])
@@ -140,7 +140,7 @@ class Process_scholar:
     # This Function is for external scholar
     def get_scholar_instance(self, name: str, keywords: str):
 
-        possible_scholars = self.get_candidates_by_name(name)
+        possible_scholars = self.get_candidates_by_name(name,SCHOLAR_QUERY_LIMIT)
         schoalar_list_length = len(possible_scholars)
         print("Length of candidates list is", schoalar_list_length)
         if schoalar_list_length == 1:  # only one result, that's the person

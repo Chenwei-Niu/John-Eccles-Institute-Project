@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react';
 import TableComponent from './components/TableComponent';
 import SearchComponent from './components/SearchComponent';
 import AddRecipientComponent from './components/AddRecipientComponent';
+import FetchInterestsButton from './components/FetchInterestsComponent';
 import axios from 'axios';
 
 function App() {
@@ -41,6 +42,7 @@ function App() {
         <SearchComponent onSearch={handleSearch} />
         <TableComponent data={filteredData.length > 0 ? filteredData : originalData} refreshTable={fetchData}/>
         <AddRecipientComponent refreshTable={fetchData}/>
+        <FetchInterestsButton refreshTable={fetchData}/>
       </div>
     </div>
   );
