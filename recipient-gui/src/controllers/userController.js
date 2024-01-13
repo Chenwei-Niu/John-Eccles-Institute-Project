@@ -33,6 +33,32 @@ const insertUser = async (req, res) => {
   }
 };
 
+const updateUser = async (req, res) => {
+    try {
+        console.log(req.body)
+        const { email, name, organization, interest } = req.body;
+
+        // process interest from text to text array
+        var interestArray = []
+        if (interest.length != 0 && typeof interest === 'string'){
+            interestArray = interest.split(',');
+        }else {
+            interestArray = '{}';
+        }
+    
+        // update user information in database
+        const result = await pool.query(
+            'UPDATE recipient SET email = $2, name = $3, organization = $4, interest = $5, is_recipient = $6 WHERE email = $1 RETURNING *',
+            [email, email, name, organization, interestArray, true]
+        );
+    
+        res.json(result.rows[0]);
+      } catch (error) {
+        console.error('Error inserting user, please check the details again', error);
+        res.status(500).json({ error: 'Internal Server Error' });
+      }
+}
+
 const fetchUserData = async (req, res) => {
     {
         try {
@@ -90,5 +116,6 @@ module.exports = {
   insertUser,
   fetchUserData,
   deleteUser,
-  fetchInterets
+  fetchInterets,
+  updateUser
 };
