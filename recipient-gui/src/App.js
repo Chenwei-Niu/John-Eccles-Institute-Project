@@ -5,6 +5,7 @@ import TableComponent from './components/TableComponent';
 import SearchComponent from './components/SearchComponent';
 import AddRecipientComponent from './components/AddRecipientComponent';
 import FetchInterestsButton from './components/FetchInterestsComponent';
+import EmailFunctionComponent from './components/EmailFunctionComponent';
 import axios from 'axios';
 
 function App() {
@@ -43,6 +44,7 @@ function App() {
         <TableComponent data={filteredData.length > 0 ? filteredData : originalData} refreshTable={fetchData}/>
         <AddRecipientComponent refreshTable={fetchData}/>
         <FetchInterestsButton refreshTable={fetchData}/>
+        <EmailFunctionComponent />
       </div>
     </div>
   );

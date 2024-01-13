@@ -11,7 +11,7 @@ const TableComponent = ({data, refreshTable}) => {
     });
     const handleInputChange = (e) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
-    };
+    }; 
   const [isInputFocused, setIsInputFocused] = useState(false);
 
   const handleFocus = () => {

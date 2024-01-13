@@ -1,7 +1,9 @@
-import os
+import sys, os
+from pathlib import Path
+path = Path(os.path.dirname(__file__))
+sys.path.append(str(path.parent.absolute())) 
 import smtplib, ssl
 import datetime as dt
-import sys
 from copy import deepcopy
 from email.mime.text import MIMEText
 from scholar.recommender_system import *
@@ -29,10 +31,10 @@ class EmailMain:
             """
         self.recipients = self.db.query(Recipient.id, Recipient.email)
         # "../static/email_template/email_template.html" for tests
-        self.html_file = open( "static/email_template/email_template.html")
+        self.html_file = open(sys.path[-1] + "/static/email_template/email_template.html")
 
         # "../static/email_template/seminar_component.html" for tests
-        seminar_component_html = open( "static/email_template/seminar_component.html")
+        seminar_component_html = open(sys.path[-1] + "/static/email_template/seminar_component.html")
         self.bs_index = BeautifulSoup(self.html_file, 'html.parser')
         self.bs_seminars = BeautifulSoup(seminar_component_html, 'html.parser')
 
@@ -82,7 +84,7 @@ class EmailMain:
             old_text.append(seminar)
 
         # "../example_modified.html" for tests
-        with open("example_modified.html", "wb") as f_output:
+        with open(sys.path[-1] +"/example_modified.html", "wb") as f_output:
             f_output.write(self.bs_index.prettify("utf-8"))
 
     def fillEventIntoHtml(self, event):
