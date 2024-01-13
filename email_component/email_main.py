@@ -7,7 +7,7 @@ import datetime as dt
 from copy import deepcopy
 from email.mime.text import MIMEText
 from scholar.recommender_system import *
-import re
+import webbrowser
 from bs4 import BeautifulSoup
 
 from backend.models import *
@@ -86,6 +86,7 @@ class EmailMain:
         # "../example_modified.html" for tests
         with open(sys.path[-1] +"/example_modified.html", "wb") as f_output:
             f_output.write(self.bs_index.prettify("utf-8"))
+        webbrowser.open(sys.path[-1] +"/example_modified.html", new=2) # The new=2 parameter means opening in a new window or tab.
 
     def fillEventIntoHtml(self, event):
         seminar = deepcopy(self.bs_seminars)
