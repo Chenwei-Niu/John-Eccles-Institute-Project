@@ -3,3 +3,4 @@
 /scrapy_component/output/
 .vs
 .idea
+**/dist/

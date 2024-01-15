@@ -1,0 +1,16 @@
+appId: com.example.recipientManagement
+productName: Recipient Management
+directories:
+  output: ./dist
+win:
+  target:
+    - nsis
+linux:
+  target:
+    - deb
+files:
+  - "public/electron.js"
+  - "dist/**/*"
+  - "package.json"
+  - "build/**/*"
+  - "node_modules/**/*"

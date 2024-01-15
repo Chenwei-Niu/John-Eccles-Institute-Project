@@ -13,10 +13,22 @@ const GenerateEmailComponent = ({refreshTable}) => {
     }
   };
 
+  const handleSendEmail = async () => {
+    try {
+      const response = await axios.post('http://localhost:3001/email/send_email');
+      alert('Sending emails to recipients.');
+    } catch (error) {
+      console.error('Error generating verification email', error);
+    }
+  };
+
   return (
-    <button onClick={handleGenerateEmail}>
+    <><button onClick={handleGenerateEmail}>
       Generate verification email
     </button>
+    <button onClick={handleGenerateEmail}>
+        Send emails
+      </button></>
   );
 };
 
