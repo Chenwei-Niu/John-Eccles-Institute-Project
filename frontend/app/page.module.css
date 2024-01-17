@@ -9,9 +9,10 @@
 }
 
 .eventCard {
-    margin-top: 30px;
-    margin-bottom: 30px;
-    border: 2px solid;
+    /* margin-top: 30px; */
+    /* margin-bottom: 30px; */
+    width: 100%;
+    border-bottom: 1px solid;    
     padding: 20px;
 }
 
@@ -24,4 +25,20 @@
     height: 5vh;
     border-radius: 15px;
     padding: 15px;
+}
+
+.seminarTitle {
+  font-size: 18px;
+  font-weight: 800;
+  margin-bottom: 10px;
+}
+
+.ellipsisDescriptionContainer {
+  margin-top: 15px;
+  width: 100%; /* 设置容器的宽度 */
+  white-space: pre-wrap;
+  /* white-space: nowrap; 防止文本换行 */
+  overflow: hidden; /* 隐藏溢出的部分 */
+  text-overflow: ellipsis; /* 显示省略号 */
+  /* border: 1px solid #ccc; 可选：添加边框以突显容器 */
 }
