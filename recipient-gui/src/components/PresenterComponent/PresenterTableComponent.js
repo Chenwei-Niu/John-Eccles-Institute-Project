@@ -130,79 +130,81 @@ const PresenterTableComponent = ({data, refreshTable}) => {
 
 
   return (
-    <table {...getTableProps()} style={{ border: '1px solid black' }}>
-      <thead>
-        {headerGroups.map((headerGroup) => (
-          <tr {...headerGroup.getHeaderGroupProps()}>
-            {headerGroup.headers.map((column) => (
-              <th {...column.getHeaderProps()} style={{ padding: '10px', borderBottom: '1px solid black' }}>
-                {column.render('Header')}
-              </th>
-            ))}
-          </tr>
-        ))}
-      </thead>
-      <tbody {...getTableBodyProps()}>
-      
-        {rows.map((row) => {
-          prepareRow(row);
-          const isSelected = row.id === selectedRow;
+    <div className='table-container'>
+      <table {...getTableProps()} style={{ border: '1px solid black' }}>
+        <thead>
+          {headerGroups.map((headerGroup) => (
+            <tr {...headerGroup.getHeaderGroupProps()}>
+              {headerGroup.headers.map((column) => (
+                <th {...column.getHeaderProps()} style={{ padding: '10px', borderBottom: '1px solid black' }}>
+                  {column.render('Header')}
+                </th>
+              ))}
+            </tr>
+          ))}
+        </thead>
+        <tbody {...getTableBodyProps()}>
+        
+          {rows.map((row) => {
+            prepareRow(row);
+            const isSelected = row.id === selectedRow;
 
-          return (
-            <React.Fragment key={row.id}>
-              <tr
-                {...row.getRowProps()}
-                style={{
-                  borderBottom: '1px solid black',
-                  cursor: 'pointer',
-                  background: isSelected ? '#f0f0f0' : 'inherit',
-                }}
-                onClick={() => {
-                    if (!isInputFocused){
-                        handleRowClick(row)
-                    }
-                    
-                }}
-              >
+            return (
+              <React.Fragment key={row.id}>
+                <tr
+                  {...row.getRowProps()}
+                  style={{
+                    borderBottom: '1px solid black',
+                    cursor: 'pointer',
+                    background: isSelected ? '#f0f0f0' : 'inherit',
+                  }}
+                  onClick={() => {
+                      if (!isInputFocused){
+                          handleRowClick(row)
+                      }
+                      
+                  }}
+                >
 
-                {row.cells.map((cell) => (
-                  <td {...cell.getCellProps()} style={{ padding: '10px' }} 
-                        onClick={()=> {
-                        console.log(cell);
-                    }}>
-                    {cell.render("Cell")}
-                    {/* {cell.isEditable ? (
-                        <div>
-                            {console.log('Cell Info:', cell)}
-                        </div>
-                    //   <EditableCell value={cell.value} row={row} column={cell.column} />
-                    ) : (
-                        cell.render('Cell')
-                    )} */}
-                    {isSelected && (
+                  {row.cells.map((cell) => (
+                    <td {...cell.getCellProps()} style={{ padding: '10px' }} 
+                          onClick={()=> {
+                          console.log(cell);
+                      }}>
+                      {cell.render("Cell")}
+                      {/* {cell.isEditable ? (
+                          <div>
+                              {console.log('Cell Info:', cell)}
+                          </div>
+                      //   <EditableCell value={cell.value} row={row} column={cell.column} />
+                      ) : (
+                          cell.render('Cell')
+                      )} */}
+                      {isSelected && (
 
-                            <tr>
-                                <td colSpan={columns.length}>
-                                    {cell.column.Header === "Actions" ? (
-                                            <button onClick={() => handleUpdate(row.original.id)}>Update</button>
-                                        ):(
-                                        <textarea name={cell.column.id} cols={cell.column.id==="interest"?50:25} rows="5" value={formData[cell.column.id]} onChange={handleInputChange} onFocus={handleFocus} onBlur={handleBlur}/>
-                                        )
-                                    }
-                                    
-                                </td>
-                            </tr>
+                              <tr>
+                                  <td colSpan={columns.length}>
+                                      {cell.column.Header === "Actions" ? (
+                                              <button onClick={() => handleUpdate(row.original.id)}>Update</button>
+                                          ):(
+                                          <textarea name={cell.column.id} cols={cell.column.id==="interest"?50:25} rows="5" value={formData[cell.column.id]} onChange={handleInputChange} onFocus={handleFocus} onBlur={handleBlur}/>
+                                          )
+                                      }
+                                      
+                                  </td>
+                              </tr>
 
-                    )}
-                  </td>
-                ))}
-              </tr>
+                      )}
+                    </td>
+                  ))}
+                </tr>
 
-            </React.Fragment>
-          );
-        })}
-      </tbody>
-    </table>
+              </React.Fragment>
+            );
+          })}
+        </tbody>
+      </table>
+    </div>
   );
 };
 
