@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import TableComponent from './TableComponent';
-import SearchComponent from './SearchComponent';
+import SearchComponent from '../SearchComponent';
 import AddRecipientComponent from './AddRecipientComponent';
 import FetchInterestsButton from './FetchInterestsComponent';
 import EmailFunctionComponent from './EmailFunctionComponent';
@@ -29,7 +29,9 @@ function Recipient() {
     const filteredResults = originalData.filter(
       (row) =>
         row.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        row.organization.toLowerCase().includes(searchTerm.toLowerCase())
+        row.organization.toLowerCase().includes(searchTerm.toLowerCase()) || 
+        row.name.toLowerCase().includes(searchTerm.toLowerCase()) || 
+        row.interest.join('').toLowerCase().includes(searchTerm.toLowerCase())
     );
     setFilteredData(filteredResults);
   };
