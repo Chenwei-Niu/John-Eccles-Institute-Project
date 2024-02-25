@@ -50,7 +50,7 @@ class Event(Base):
     url = Column(Text())
     access_date = Column(DateTime(timezone=True))
     is_seminar = Column(Boolean(),default=False)
-    speaker_object = relationship("Scholar")
+    speaker_object = relationship("Scholar") # new added line, need to figure out if any bug exists
 
 class Recipient(Base):
     __tablename__ = "recipient"
