@@ -31,7 +31,7 @@ function Recipient() {
         row.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
         row.organization.toLowerCase().includes(searchTerm.toLowerCase()) || 
         row.name.toLowerCase().includes(searchTerm.toLowerCase()) || 
-        row.interest.join('').toLowerCase().includes(searchTerm.toLowerCase())
+        row.interest.join(' ').toLowerCase().includes(searchTerm.toLowerCase())
     );
     setFilteredData(filteredResults);
   };
@@ -46,6 +46,7 @@ function Recipient() {
         <FetchInterestsButton refreshTable={fetchData}/>
         <EmailFunctionComponent />
     </div>
+
   );
 }
 
