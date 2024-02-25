@@ -8,10 +8,6 @@ const insertPresenter = async (req, res) => {
     console.log(req.body)
     const { name, organization, google_scholar_id, interest } = req.body;
 
-    // 验证邮箱是否存在
-    if (!email) {
-      return res.status(400).json({ error: 'Email is required' });
-    }
     // process interest from text to text array
     var interestArray = []
     if (interest.length != 0){
@@ -22,13 +18,13 @@ const insertPresenter = async (req, res) => {
 
     // 在数据库中插入用户数据
     const result = await pool.query(
-      'INSERT INTO scholar (name, organization, google_scholar_id, interest) VALUES ($1, $2, $3, $4) RETURNING *',
+      'INSERT INTO scholar ( name, organization, google_scholar_id, interest) VALUES ($1, $2, $3, $4) RETURNING *',
       [ name, organization, google_scholar_id, interestArray]
     );
 
     res.json(result.rows[0]);
   } catch (error) {
-    console.error('Error inserting user, please check the details again', error);
+    console.error('Error inserting presenter, please check the details again', error);
     res.status(500).json({ error: 'Internal Server Error' });
   }
 };

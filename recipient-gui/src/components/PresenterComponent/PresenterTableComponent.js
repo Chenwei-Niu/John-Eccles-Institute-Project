@@ -1,5 +1,5 @@
 import React, { useMemo, useState } from 'react';
-import { useTable, useEditable } from 'react-table';
+import { useTable, useEditable, useSortBy } from 'react-table';
 import axios from 'axios';
 
 const PresenterTableComponent = ({data, refreshTable}) => {
@@ -26,6 +26,7 @@ const PresenterTableComponent = ({data, refreshTable}) => {
 
   const columns = useMemo(
     () => [
+      { Header: 'ID', accessor: 'id' , isEditable: false},
       { Header: 'Name', accessor: 'name' , isEditable: true},
       { Header: 'Organization', accessor: 'organization' , isEditable: true},
       { Header: 'Google Scholar ID', accessor: 'google_scholar_id' , isEditable: true},
@@ -187,8 +188,9 @@ const PresenterTableComponent = ({data, refreshTable}) => {
                                       {cell.column.Header === "Actions" ? (
                                               <button onClick={() => handleUpdate(row.original.id)}>Update</button>
                                           ):(
+                                            cell.column.Header === "ID" ? null :(
                                           <textarea name={cell.column.id} cols={cell.column.id==="interest"?50:25} rows="5" value={formData[cell.column.id]} onChange={handleInputChange} onFocus={handleFocus} onBlur={handleBlur}/>
-                                          )
+                                            ))
                                       }
                                       
                                   </td>

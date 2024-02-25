@@ -43,13 +43,14 @@ class Event(Base):
     description = Column(Text())
     date = Column(Text())
     venue = Column(Text())
-    speaker = Column(Integer,ForeignKey("scholar.id"))
+    speaker = Column(Integer,ForeignKey("scholar.id"), onupdate="CASCADE", ondelete="CASCADE")
     # speaker:relationship("scholar", lazy="joined", cascade="all, delete-orphan")
     keywords = Column(Text())
     organization = Column(Text())
     url = Column(Text())
     access_date = Column(DateTime(timezone=True))
     is_seminar = Column(Boolean(),default=False)
+    speaker_object = relationship("Scholar")
 
 class Recipient(Base):
     __tablename__ = "recipient"
