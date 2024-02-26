@@ -43,7 +43,7 @@ class Event(Base):
     description = Column(Text())
     date = Column(Text())
     venue = Column(Text())
-    speaker = Column(Integer,ForeignKey("scholar.id"), onupdate="CASCADE", ondelete="CASCADE")
+    speaker = Column(Integer,ForeignKey("scholar.id", onupdate="CASCADE",ondelete="CASCADE"))
     # speaker:relationship("scholar", lazy="joined", cascade="all, delete-orphan")
     keywords = Column(Text())
     organization = Column(Text())

@@ -33,10 +33,12 @@ export default function Home() {
   const renderEvent = (item) => {
     return (
       <div key={item.id} className={styles.eventCard}>
+        <a href={`${item.url}`}>
         <p className={styles.seminarTitle}>{`${item.title}`}</p>
         <p>{`Date: ${item.date}`}</p>
         <p>{`Venue: ${item.venue}`}</p>
         <p className={styles.ellipsisDescriptionContainer}><div style={{fontWeight:650}}>{`Description:`}</div>{`${item.description}`}</p>
+        </a>
       </div>
     )
   }

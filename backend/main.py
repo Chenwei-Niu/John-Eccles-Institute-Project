@@ -3,6 +3,7 @@ from models import *
 from sqlalchemy.orm import sessionmaker
 from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy.sql import text
+from typing import Union
 
 app = FastAPI()
 origins = ["*"]
@@ -32,7 +33,7 @@ async def read_events():
     return events
 
 @app.get("/search-events/")
-async def read_events(searchTerm: str | None):
+async def read_events(searchTerm: Union[str , None]):
     # q = db.query(Event, Scholar).filter(Event.speaker == Scholar.id).filter(text('event.search_vector @@ plainto_tsquery(:terms)'))
     q = db.query(Event).filter(text('event.search_vector @@ plainto_tsquery(:terms)'))
     # # # Defer loading of Event.speaker relationship
