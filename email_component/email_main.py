@@ -75,7 +75,10 @@ class EmailMain:
         time_delta = dt.timedelta(days=7)
 
         event_lst = self.db.query(Event.description, Event.title, Event.venue, Event.date, Event.url,
-                                  Scholar.name).join(Scholar).filter(Event.access_date + time_delta > curr_time)
+                                  Scholar.name).join(Scholar).filter(
+                                      Event.access_date + time_delta > curr_time,
+                                      Event.is_seminar == True
+                                      )
 
         self.bs_index.find(id="LETTER_DATE").string = curr_time.strftime("%d %B, %Y")
         old_text = self.bs_index.find("p", {"id": "seminars"})
@@ -90,10 +93,10 @@ class EmailMain:
 
     def fillEventIntoHtml(self, event):
         seminar = deepcopy(self.bs_seminars)
-        seminar.find(id="URL_PLACEHOLDER")['href'] = event.url
-        seminar.find(id="TITLE_PLACEHOLDER").string = event.title
-        seminar.find(id="PRESENTER_PLACEHOLDER").string = event.name
-        seminar.find(id="DATETIME_PLACEHOLDER").string = event.date
-        seminar.find(id="LOCATION_PLACEHOLDER").string = event.venue
+        seminar.find(id="URL_PLACEHOLDER")['href'] = event.url if event.url else "None"
+        seminar.find(id="TITLE_PLACEHOLDER").string = event.title if event.title else "None"
+        seminar.find(id="PRESENTER_PLACEHOLDER").string = event.name if event.name else "None"
+        seminar.find(id="DATETIME_PLACEHOLDER").string = event.date if event.date else "None"
+        seminar.find(id="LOCATION_PLACEHOLDER").string = event.venue if event.venue else "None"
         seminar.find(id="DESCRIPTION_PLACEHOLDER").string = str(event.description)[:300] + "..."
         return seminar
