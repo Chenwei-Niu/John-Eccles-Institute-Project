@@ -34,13 +34,19 @@ async def read_events():
 
 @app.get("/search-events/")
 async def read_events(searchTerm: Union[str , None]):
-    # q = db.query(Event, Scholar).filter(Event.speaker == Scholar.id).filter(text('event.search_vector @@ plainto_tsquery(:terms)'))
-    q = db.query(Event).filter(text('event.search_vector @@ plainto_tsquery(:terms)'))
-    # # # Defer loading of Event.speaker relationship
-    # # q = q.options(joinedload(Event.speaker).defer('*'))
-    # # Use joinedload getting presenter's name
-    # q = q.options(joinedload(Event.speaker).load_only(Scholar.name))
-    q = q.params(terms=searchTerm).all()
+    query = db.query(Event).filter(
+    text("to_tsvector('english', COALESCE(title, '') || ' ' || COALESCE(description, '') || ' ' || COALESCE(venue, '') || ' ' || COALESCE(date::text, '')) @@ plainto_tsquery('english', :search_term)")
+    ).params(search_term=f"{searchTerm}:*")
 
-    return q
+    query = query.all()
+
+    presenter_query = db.query( Event, Scholar).join(Scholar, Event.speaker == Scholar.id).filter(
+        text("to_tsvector('english', scholar.name) @@ plainto_tsquery('english', :search_term)")
+    ).params(search_term=f"{searchTerm}:*")
+    presenter_query = presenter_query.all()
+
+    for event,scholar in presenter_query:
+        query.append(event)
+
+    return query 
 

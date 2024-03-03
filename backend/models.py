@@ -1,6 +1,6 @@
 from sqlalchemy import (
     Integer, Text, Boolean, DateTime)
-from sqlalchemy import create_engine, Column, event, DDL, func
+from sqlalchemy import create_engine, Column, event, DDL, func, or_
 from sqlalchemy.ext.declarative import declarative_base
 from scrapy.utils.project import get_project_settings
 from sqlalchemy.dialects.postgresql import ARRAY
@@ -71,9 +71,28 @@ class Scholar(Base):
     events = relationship('Event', backref='scholar', lazy=False)
     
 print("Start listen event table 'after create'")
-event.listen(Event.__table__, 'after_create', DDL("alter table event add column search_vector tsvector"))
-event.listen(Event.__table__, 'after_create',  DDL("""create index event_entries_search_index on event using gin(search_vector)"""))
-event.listen(Event.__table__, 'after_create', search_vector_trigger_original)
+# event.listen(Event.__table__, 'after_create', DDL("alter table event add column search_vector tsvector"))
+# event.listen(Event.__table__, 'after_create',  DDL("""CREATE INDEX idx_events_search_vector ON event USING gin(
+#     to_tsvector('english', COALESCE(title, '') || ' ' || COALESCE(description, '') || ' ' || COALESCE(venue, '') || ' ' || COALESCE(date::text, '') || ' ' || COALESCE(scholar.name, ''))
+# )
+# FROM event
+# JOIN scholar ON event.speaker = scholar.id;
+# """))
+engine = db_connect()
+
+# 创建会话
+# Session = sessionmaker(bind=engine)
+# session = Session()
+# session.execute(DDL("""CREATE INDEX idx_events_search_vector ON event USING gin(
+# to_tsvector('english', COALESCE(title, '') || ' ' || COALESCE(description, '') || ' ' || COALESCE(venue, '') || ' ' || COALESCE(date::text, '') )
+# )"""))
+
+# session.execute(DDL("""CREATE INDEX idx_scholar_search_vector ON scholar USING gin(
+# to_tsvector('english', name)
+# )"""))
+
+# session.commit()
+# event.listen(Event.__table__, 'after_create', search_vector_trigger_original)
 print("Finish listen event table 'after create'")
 
 
