@@ -12,7 +12,8 @@ const PresenterTableComponent = ({data, refreshTable}) => {
         venue: '',
         description: '',
         keywords: '',
-        url: ''
+        url: '',
+        is_seminar: '',
     });
     const handleInputChange = (e) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -39,6 +40,11 @@ const PresenterTableComponent = ({data, refreshTable}) => {
       { Header: 'Description', accessor: 'description'},
       { Header: 'Keywords', accessor: 'keywords'},
       { Header: 'Url', accessor: 'url'},
+      { Header: 'Is Seminar', accessor: 'is_seminar',
+        Cell: ({ row }) => (
+        row.original.is_seminar ? 'true' : 'false'
+      ),},
+
       {
         Header: 'Actions',
         accessor: 'actions',
@@ -69,6 +75,7 @@ const PresenterTableComponent = ({data, refreshTable}) => {
         description:row.values.description,
         keywords:row.values.keywords,
         url:row.values.url,
+        is_seminar:row.values.is_seminar
     })
     console.log(row)
   };
@@ -122,6 +129,10 @@ const PresenterTableComponent = ({data, refreshTable}) => {
       }
       if (!formData.url) {
         alert('Url is required');
+        return;
+      }
+      if (!formData.is_seminar) {
+        alert('Is Seminar is required');
         return;
       }
       // 弹出确认对话框

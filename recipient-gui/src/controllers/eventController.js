@@ -19,8 +19,8 @@ const insertEvent = async (req, res) => {
 
     // insert
     const result = await pool.query(
-      'INSERT INTO event ( title, speaker, date, venue, description, keywords, url) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *',
-      [ title, speaker, date, venue, description, keywords, url]
+      'INSERT INTO event ( title, speaker, date, venue, description, keywords, url, is_seminar) VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING *',
+      [ title, speaker, date, venue, description, keywords, url, true]
     );
 
     res.json(result.rows[0]);
@@ -33,22 +33,22 @@ const insertEvent = async (req, res) => {
 const updateEvent = async (req, res) => {
     try {
         console.log(req.body)
-        const { title, speaker, date, venue, description, keywords, url } = req.body.formData;
+        const { title, speaker, date, venue, description, keywords, url, is_seminar } = req.body.formData;
         const id = req.body.id;
-        // verify the existence of speaker
-        try {
-            const result = await pool.query('SELECT * FROM scholar WHERE id = $1', [speaker]);
-          } catch (error) {
-            console.error('Error querying database', error);
-            res.status(500).json({ error: 'Internal Server Error' });
-        }
+        // // verify the existence of speaker
+        // try {
+        //     const result = await pool.query('SELECT * FROM scholar WHERE id = $1', [speaker]);
+        //   } catch (error) {
+        //     console.error('Error querying database', error);
+        //     res.status(500).json({ error: 'Internal Server Error' });
+        // }
 
         // update event information in database
         const result = await pool.query(
-            'UPDATE event SET title = $2, speaker = $3, date = $4, venue = $5,description = $6, keywords = $7, url = $8 WHERE id = $1 RETURNING *',
-            [id, title, speaker, date, venue, description, keywords, url]
+            'UPDATE event SET title = $2, speaker = $3, date = $4, venue = $5,description = $6, keywords = $7, url = $8, is_seminar = $9 WHERE id = $1 RETURNING *',
+            [id, title, speaker, date, venue, description, keywords, url, is_seminar.toString()]
         );
-    
+
         res.json(result.rows[0]);
 
         
@@ -61,7 +61,7 @@ const updateEvent = async (req, res) => {
 const fetchEventData = async (req, res) => {
     {
         try {
-          const result = await pool.query('SELECT event.id,event.title,scholar.name,event.speaker,event.date,event.venue,event.description,event.keywords,event.url FROM event JOIN scholar ON event.speaker = scholar.id');
+          const result = await pool.query('SELECT event.id,event.title,scholar.name,event.speaker,event.date,event.venue,event.description,event.keywords,event.url,event.is_seminar FROM event JOIN scholar ON event.speaker = scholar.id');
           res.json(result.rows);
         } catch (error) {
           console.error('Error querying database', error);
