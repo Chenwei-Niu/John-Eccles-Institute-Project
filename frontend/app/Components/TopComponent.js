@@ -175,6 +175,8 @@ export default class TopComponent extends Component {
         </div>
             </div>
           </div>
+          </div></div></div></div></div></div></div></div>
+          
                   <div class="band-college-wrap clearfix">
             <div class="band-college">
               <div class="panel-pane pane-custom pane-12 text-center padtop"  >
