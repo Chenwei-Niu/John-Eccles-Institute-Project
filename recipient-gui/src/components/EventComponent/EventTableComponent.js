@@ -75,7 +75,7 @@ const PresenterTableComponent = ({data, refreshTable}) => {
         description:row.values.description,
         keywords:row.values.keywords,
         url:row.values.url,
-        is_seminar:row.values.is_seminar
+        is_seminar:row.values.is_seminar.toString()
     })
     console.log(row)
   };

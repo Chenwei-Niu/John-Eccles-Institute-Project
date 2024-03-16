@@ -2,6 +2,7 @@
 const { spawn } = require('child_process');
 const {pool} = require('../models/db'); // 使用你的数据库连接配置
 const path = require('path');
+const __script_dir = "python_scripts";
 
 const insertUser = async (req, res) => {
   try {
@@ -62,7 +63,7 @@ const updateUser = async (req, res) => {
 const fetchUserData = async (req, res) => {
     {
         try {
-          const result = await pool.query('SELECT * FROM recipient');
+          const result = await pool.query('SELECT * FROM recipient ORDER BY recipient.id');
           res.json(result.rows);
         } catch (error) {
           console.error('Error querying database', error);
@@ -87,7 +88,7 @@ const deleteUser = async (req, res) => {
 const fetchInterets = async (req, res) => {
     try {
       // 调用 Python 脚本进行查询
-      const pythonProcess = spawn('python', [path.join(__dirname,'interests_lookup.py')]);
+      const pythonProcess = spawn('python', [path.join(__dirname,__script_dir,'interests_lookup.py')]);
   
       pythonProcess.stdout.on('data', (data) => {
         const result = data.toString().trim();

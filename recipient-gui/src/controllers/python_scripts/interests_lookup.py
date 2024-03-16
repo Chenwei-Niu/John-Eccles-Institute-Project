@@ -1,7 +1,7 @@
 import sys, os, re, time
 from pathlib import Path
 path = Path(os.path.dirname(__file__))
-sys.path.append(str(path.parent.parent.parent.absolute()))
+sys.path.append(str(path.parent.parent.parent.parent.absolute()))
 
 from scholarly import scholarly, ProxyGenerator
 from backend.models import *

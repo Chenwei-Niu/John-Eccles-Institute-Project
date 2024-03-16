@@ -9,7 +9,7 @@ from email.mime.text import MIMEText
 from scholar.recommender_system import *
 import webbrowser
 from bs4 import BeautifulSoup
-
+from sqlalchemy import asc
 from backend.models import *
 
 from email.mime.multipart import MIMEMultipart
@@ -40,10 +40,13 @@ class EmailMain:
 
     def send(self):
         curr_time = dt.datetime.now()
-        time_delta = dt.timedelta(days=7)
+        time_delta = dt.timedelta(days=14)
 
         event_lst = self.db.query(Event.id, Event.description, Event.title, Event.venue, Event.date, Event.url,
-                                  Scholar.name).join(Scholar).filter(Event.access_date + time_delta > curr_time)
+                                  Scholar.name).join(Scholar).order_by(asc(Event.standard_datetime)).filter(
+                                      Event.standard_datetime > curr_time,
+                                      Event.is_seminar == True
+                                      )
         recommend_system = RecommenderSystem()
         interested_seminar_lst = recommend_system.getSeminarsOfPossibleInterest()
         for key in interested_seminar_lst:
@@ -72,11 +75,11 @@ class EmailMain:
 
     def verify(self):
         curr_time = dt.datetime.now()
-        time_delta = dt.timedelta(days=7)
+        time_delta = dt.timedelta(days=14)
 
         event_lst = self.db.query(Event.description, Event.title, Event.venue, Event.date, Event.url,
-                                  Scholar.name).join(Scholar).filter(
-                                      Event.access_date + time_delta > curr_time,
+                                  Scholar.name).join(Scholar).order_by(asc(Event.standard_datetime)).filter(
+                                      Event.standard_datetime > curr_time,
                                       Event.is_seminar == True
                                       )
 

@@ -58,7 +58,7 @@ const updatePresenter = async (req, res) => {
 const fetchPresenterData = async (req, res) => {
     {
         try {
-          const result = await pool.query('SELECT * FROM scholar');
+          const result = await pool.query('SELECT * FROM scholar ORDER BY scholar.id');
           res.json(result.rows);
         } catch (error) {
           console.error('Error querying database', error);

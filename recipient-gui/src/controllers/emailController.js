@@ -1,10 +1,11 @@
 const path = require('path');
 const { spawn } = require('child_process');
+const __script_dir = "python_scripts";
 
 const generateEmail = async (req, res) => {
     try {
       // 调用 Python 脚本进行查询
-      const pythonProcess = spawn('python', [path.join(__dirname,'email_verify.py')]);
+      const pythonProcess = spawn('python', [path.join(__dirname,__script_dir,'email_verify.py')]);
   
       pythonProcess.stdout.on('data', (data) => {
         const result = data.toString().trim();
@@ -31,7 +32,7 @@ const generateEmail = async (req, res) => {
 const sendEmail = async (req, res) => {
   try {
     // 调用 Python 脚本进行查询
-    const pythonProcess = spawn('python', [path.join(__dirname,'send_emails.py')]);
+    const pythonProcess = spawn('python', [path.join(__dirname,__script_dir,'send_emails.py')]);
 
     pythonProcess.stdout.on('data', (data) => {
       const result = data.toString().trim();

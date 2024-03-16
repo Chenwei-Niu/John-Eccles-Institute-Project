@@ -15,6 +15,7 @@ function Event() {
     try {
       const response = await axios.get('http://localhost:3001/event/data');
       setOriginalData(response.data);
+      console.log(originalData);
     } catch (error) {
       console.error('Error fetching data from API', error);
     }
@@ -25,11 +26,11 @@ function Event() {
     // Implement your search logic and update the filtered data in the state
     const filteredResults = originalData.filter(
       (row) =>
-        row.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        row.name.toLowerCase().includes(searchTerm.toLowerCase()) || 
-        row.date.toLowerCase().includes(searchTerm.toLowerCase()) || 
-        row.venue.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        row.keywords.toLowerCase().includes(searchTerm.toLowerCase())
+        (row.title||'').toLowerCase().includes(searchTerm.toLowerCase()) ||
+        (row.name||'').toLowerCase().includes(searchTerm.toLowerCase()) || 
+        (row.date||'').toLowerCase().includes(searchTerm.toLowerCase()) || 
+        (row.venue||'').toLowerCase().includes(searchTerm.toLowerCase()) ||
+        (row.keywords||'').toLowerCase().includes(searchTerm.toLowerCase())
     );
     setFilteredData(filteredResults);
   };

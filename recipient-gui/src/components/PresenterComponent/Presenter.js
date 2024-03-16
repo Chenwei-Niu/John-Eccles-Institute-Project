@@ -26,9 +26,9 @@ function Presenter() {
     // Implement your search logic and update the filtered data in the state
     const filteredResults = originalData.filter(
       (row) =>
-        row.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        row.organization.toLowerCase().includes(searchTerm.toLowerCase()) || 
-        row.google_scholar_id.toLowerCase().includes(searchTerm.toLowerCase()) || 
+        (row.name||'').toLowerCase().includes(searchTerm.toLowerCase()) ||
+        (row.organization||'').toLowerCase().includes(searchTerm.toLowerCase()) || 
+        (row.google_scholar_id||'').toLowerCase().includes(searchTerm.toLowerCase()) || 
         row.interest.join(' ').toLowerCase().includes(searchTerm.toLowerCase())
     );
     setFilteredData(filteredResults);

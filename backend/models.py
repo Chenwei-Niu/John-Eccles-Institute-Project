@@ -30,6 +30,7 @@ class Event(Base):
     organization = Column(Text())
     url = Column(Text())
     access_date = Column(DateTime(timezone=True))
+    standard_datetime = Column(DateTime(timezone=True))
     is_seminar = Column(Boolean(),default=False)
 
 class Recipient(Base):
