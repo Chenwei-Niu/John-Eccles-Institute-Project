@@ -7,9 +7,6 @@ function Event() {
   const [originalData, setOriginalData] = useState([]);
   const [filteredData, setFilteredData] = useState([]);
 
-  useEffect(()=>{
-    fetchData();
-  }, [])
 
   const fetchData = async () => {
     try {
@@ -20,6 +17,10 @@ function Event() {
       console.error('Error fetching data from API', error);
     }
   };
+
+  useEffect(()=>{
+    fetchData();
+  }, [])
 
   const handleSearch = (searchTerm) => {
     fetchData();
