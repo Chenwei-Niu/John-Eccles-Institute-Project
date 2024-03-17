@@ -4,6 +4,7 @@ import SearchComponent from '../SearchComponent';
 import AddRecipientComponent from './AddRecipientComponent';
 import FetchInterestsButton from './FetchInterestsComponent';
 import EmailFunctionComponent from './EmailFunctionComponent';
+import BulkAddRecipientComponent from './BulkAddRecipientComponent';
 import axios from 'axios';
 
 function Recipient() {
@@ -45,6 +46,7 @@ function Recipient() {
         <AddRecipientComponent refreshTable={fetchData}/>
         <FetchInterestsButton refreshTable={fetchData}/>
         <EmailFunctionComponent />
+        <BulkAddRecipientComponent />
     </div>
 
   );

@@ -26,7 +26,7 @@ const GenerateEmailComponent = ({refreshTable}) => {
     <><button onClick={handleGenerateEmail}>
       Generate verification email
     </button>
-    <button onClick={handleGenerateEmail}>
+    <button onClick={handleSendEmail}>
         Send emails
       </button></>
   );
