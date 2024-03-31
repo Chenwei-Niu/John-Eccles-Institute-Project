@@ -5,6 +5,7 @@ import {createRoot} from 'react-dom/client';
 import styles from './page.module.css';
 import TopComponent from './Components/TopComponent'
 import FooterComponent from './Components/FooterComponent';
+import SetCookieComponent from './Components/SetCookieComponent';
 
 export default function Home() {
   const [data, setData] = useState(null);
@@ -49,6 +50,7 @@ export default function Home() {
   return(
     <div className={styles.main}>
       <TopComponent />
+      <SetCookieComponent />
       {/* <from className={styles.form} onSubmit={searchEvents}> */}
         <input className={styles.searchInput} 
           type="text"  value={searchTerm} 

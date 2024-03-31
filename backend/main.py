@@ -1,4 +1,5 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
+from fastapi.responses import Response
 from models import *
 from sqlalchemy.orm import sessionmaker
 from fastapi.middleware.cors import CORSMiddleware
@@ -6,6 +7,7 @@ from sqlalchemy.sql import text
 from sqlalchemy import desc,asc
 from typing import Union
 from datetime import datetime
+import secrets
 
 app = FastAPI()
 origins = ["*"]
@@ -52,4 +54,14 @@ async def read_events(searchTerm: Union[str , None]):
             query.append(event)
 
     return query 
+
+@app.post("/set_cookie")
+async def set_cookie(request: Request, response: Response):
+
+    data = await request.json()
+    
+    interests = data.get("interests")
+    response.set_cookie(key="interests", value=interests)
+    response.headers["Host"] = request.headers.get("Host")
+    return {"message": "Cookie set successfully"}
 
