@@ -1,0 +1,13 @@
+.table-container {
+    display: flex;
+    /* justify-content: center; */
+    align-items: center;
+    margin: 3vh 0vh;
+  }
+
+.inline-notification{
+    align-items: center;
+    font-size: 1.5em;
+    font-weight: 600;
+    color: red;
+}

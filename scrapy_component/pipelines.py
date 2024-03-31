@@ -53,6 +53,7 @@ class SaveToDatabase:
             event.organization = item["event"]["organization"]
             event.url = item["event"]["url"]
             event.access_date = item["event"]["access_date"]
+            event.standard_datetime = item["event"]["standard_datetime"]
             event.is_seminar = item["event"]["is_seminar"]
             # event.speaker_id = scholar.id
 

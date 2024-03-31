@@ -1,7 +1,10 @@
 "use client";
 
 import { useEffect, useState } from 'react';
-import styles from './page.module.css'
+import {createRoot} from 'react-dom/client';
+import styles from './page.module.css';
+import TopComponent from './Components/TopComponent'
+import FooterComponent from './Components/FooterComponent';
 
 export default function Home() {
   const [data, setData] = useState(null);
@@ -33,16 +36,19 @@ export default function Home() {
   const renderEvent = (item) => {
     return (
       <div key={item.id} className={styles.eventCard}>
-        <p>{`Title: ${item.title}`}</p>
+        <a href={`${item.url}`}>
+        <p className={styles.seminarTitle}>{`${item.title}`}</p>
         <p>{`Date: ${item.date}`}</p>
         <p>{`Venue: ${item.venue}`}</p>
-        <p>{`Description: ${item.description}`}</p>
+        <p className={styles.ellipsisDescriptionContainer}><div style={{fontWeight:650}}>{`Description:`}</div>{`${item.description}`}</p>
+        </a>
       </div>
     )
   }
 
   return(
     <div className={styles.main}>
+      <TopComponent />
       {/* <from className={styles.form} onSubmit={searchEvents}> */}
         <input className={styles.searchInput} 
           type="text"  value={searchTerm} 
@@ -52,6 +58,9 @@ export default function Home() {
       {searchTerm ? searchResult.map(event => renderEvent(event)): 
         data ? data.map(event => renderEvent(event)) : 'loading...'
       }
+      <FooterComponent />
     </div>
+    
   )
 }
+
