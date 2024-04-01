@@ -10,7 +10,7 @@ from datetime import datetime
 import secrets
 
 app = FastAPI()
-origins = ["*"]
+origins = ["http://localhost:5000","http://127.0.0.1:5000"]
 
 #TODO: set appropiate CORS
 app.add_middleware(
@@ -70,5 +70,8 @@ async def get_cookie(request:Request):
     # cookie is obtained in Request Obejct
     cookies = request.cookies
     print(cookies)
-    interests_cookie = cookies["interests"]
-    return interests_cookie
+    if "interests" in cookies:
+        interests_cookie = cookies["interests"]
+        return interests_cookie
+    else:
+        return ""
