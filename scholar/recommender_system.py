@@ -18,14 +18,16 @@ class RecommenderSystem:
                 for keyword in presenter_interest_and_keywords:
                     search_doc = word2vector_nlp(interest)
                     main_doc = word2vector_nlp(keyword)
-                    simi = search_doc.similarity(main_doc)
-                    if simi > threshold:
-                        print(recipient.name + ": " + interest + ", " + keyword + ", " + str(simi))
-                        if interested_seminar_dict.get(recipient.id):
-                            interested_seminar_dict.get(recipient.id).append(event.id)
-                        else:
-                            interested_seminar_dict[recipient.id] = [event.id]
-                        return
+                    if search_doc and search_doc.vector_norm: # Make sure search_doc is not None
+                        if main_doc and main_doc.vector_norm: # Make sure main_doc is not None
+                            simi = search_doc.similarity(main_doc)
+                            if simi > threshold:
+                                print(recipient.name + ": " + interest + ", " + keyword + ", " + str(simi))
+                                if interested_seminar_dict.get(recipient.id):
+                                    interested_seminar_dict.get(recipient.id).append(event.id)
+                                else:
+                                    interested_seminar_dict[recipient.id] = [event.id]
+                                return
 
         event_lst = (self.db.query(Event.id, Event.title, Event.keywords, Scholar.interest).join(Scholar).filter(
             Event.speaker == Scholar.id).all())
