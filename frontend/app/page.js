@@ -9,15 +9,26 @@ import SetCookieComponent from './Components/SetCookieComponent';
 
 export default function Home() {
   const [data, setData] = useState(null);
-  const [searchTerm, setSearchTerm] = useState(null);
+  const [searchTerm, setSearchTerm] = useState("");
   const [searchResult, setSearchResult] = useState([]);
   
   useEffect(() => {
-    fetch('http://127.0.0.1:8000/get-events')
+    fetch('http://127.0.0.1:8000/get-events',{
+      credentials: 'include' // This setting in crucial to add cookies to cross-domain request header
+    })
       .then(response => response.json())
       .then(json => setData(json))
       .catch(error => console.error(error));
   }, []);
+
+  const handleCookieUpdate= () =>{
+    fetch('http://127.0.0.1:8000/get-events',{
+      credentials: 'include' // This setting in crucial to add cookies to cross-domain request header
+    })
+      .then(response => response.json())
+      .then(json => setData(json))
+      .catch(error => console.error(error));
+  }
 
   const handleSearchInputChange = (event) => {
     console.log(searchTerm)
@@ -28,7 +39,9 @@ export default function Home() {
   const searchEvents = (keywords) => {
     fetch('http://127.0.0.1:8000/search-events?' +  new URLSearchParams({
         searchTerm: keywords,
-      }))
+      }),{
+        credentials: 'include' // This setting in crucial to add cookies to cross-domain request header
+      })
       .then(response => response.json())
       .then(json => setSearchResult(json))
       .catch(error => console.error(error));
@@ -41,7 +54,7 @@ export default function Home() {
         <p className={styles.seminarTitle}>{`${item.title}`}</p>
         <p>{`Date: ${item.date}`}</p>
         <p>{`Venue: ${item.venue}`}</p>
-        <p className={styles.ellipsisDescriptionContainer}><div style={{fontWeight:650}}>{`Description:`}</div>{`${item.description}`}</p>
+        <div className={styles.ellipsisDescriptionContainer}><p style={{fontWeight:650}}>{`Description:`}</p>{`${item.description}`}</div>
         </a>
       </div>
     )
@@ -50,7 +63,7 @@ export default function Home() {
   return(
     <div className={styles.main}>
       <TopComponent />
-      <SetCookieComponent />
+      <SetCookieComponent refreshEventList={handleCookieUpdate}/>
       {/* <from className={styles.form} onSubmit={searchEvents}> */}
         <input className={styles.searchInput} 
           type="text"  value={searchTerm} 

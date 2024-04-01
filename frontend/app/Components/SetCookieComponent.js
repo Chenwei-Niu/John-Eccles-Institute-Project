@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import styles from '../page.module.css';
 
-function SetCookieComponent() {
+function SetCookieComponent({refreshEventList}) {
     const [interests, setInterests] = useState('');
     const [buttonFlag, setButtonFlag] = useState(false);
+    const [updateCookieFlag, setUpdateCookieFlag] = useState(false);
     const handleInterestsChange = (event) => {
         setButtonFlag(true)
         setInterests(event.target.value);
@@ -21,7 +22,7 @@ function SetCookieComponent() {
         .then(response => response.json())
         .then(json => setInterests(json))
         .catch(error => console.error(error));
-    }, [buttonFlag]);
+    }, [updateCookieFlag]);
 
     const handleSubmit = (event) => {
         event.preventDefault();
@@ -39,6 +40,8 @@ function SetCookieComponent() {
             if (response.ok) {
                 alert('Cookie is set successfully!');
                 setButtonFlag(false)
+                setUpdateCookieFlag(updateCookieFlag ? false:true)
+                refreshEventList()
             } else {
                 alert('Failed to set Cookie!');
             }
@@ -49,6 +52,7 @@ function SetCookieComponent() {
     return (
         <div className={styles.cookieHostField}>
             {interests == "" || buttonFlag? 
+            
                 <><form onSubmit={handleSubmit} className={styles.cookieInputForm}>
                     <label className={styles.cookieDisplay} htmlFor="interests">Interests:</label>
                     <div className={`${styles.addTag} ${styles.cookieDisplay}`}>

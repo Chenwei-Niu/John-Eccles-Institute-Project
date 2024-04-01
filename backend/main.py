@@ -5,9 +5,15 @@ from sqlalchemy.orm import sessionmaker
 from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy.sql import text
 from sqlalchemy import desc,asc
-from typing import Union
+from typing import List, Union
 from datetime import datetime
-import secrets
+
+import sys, os
+from pathlib import Path
+path = Path(os.path.dirname(__file__))
+sys.path.append(str(path.parent.absolute())) 
+# The four lines above are required, so that this py file could detect other modules
+from scholar.recommender_system import RecommenderSystem
 
 app = FastAPI()
 origins = ["http://localhost:5000","http://127.0.0.1:5000"]
@@ -24,16 +30,32 @@ app.add_middleware(
 engine = db_connect()
 Session= sessionmaker(bind=engine)
 db = Session()
+rs = RecommenderSystem()
 
 @app.get("/")
 async def root():
     return {"message": "server is live"}
 
 @app.get("/get-events")
-async def read_events():
+async def read_events(request:Request):
     events = db.query(Event).order_by(asc(Event.standard_datetime)).filter(Event.standard_datetime > datetime.now() ).all() # Sort by date field in ascending order
+    # events = db.query(Event).order_by(asc(Event.standard_datetime)).all() # Test used only, past seminars would be displayed
+
     for event in events:
-        event.description = str(event.description)[:300] + "..."
+        event.description = str(event.description).strip()[:300] + "..."
+
+    # prioritise seminars base on user's cookie
+    interests = await get_cookie(request=request)
+    if interests == "": # no cookie exists or the user hasn't typed in any interest
+        pass
+    else:
+        pq = rs.get_priority_seminars_by_interests(interests)
+        while not pq.empty():
+            priority_seminar = pq.get()
+            print(priority_seminar)
+            index = get_event_index_by_eventID(events,priority_seminar[1])
+            if index is not None:
+                events.insert(0, events.pop(index))
     return events
 
 @app.get("/search-events/")
@@ -75,3 +97,11 @@ async def get_cookie(request:Request):
         return interests_cookie
     else:
         return ""
+    
+# Helper Function
+def get_event_index_by_eventID(events:List[Event],event_id):
+    for i in range(0,len(events)):
+        if events[i].id == event_id:
+            return i
+    else:
+        return None
