@@ -8,6 +8,10 @@
   background-color: white;
 }
 
+.searchAndSeminarWrapper {
+  width: 100%;
+}
+
 .eventCard {
     /* margin-top: 30px; */
     /* margin-bottom: 30px; */
