@@ -55,7 +55,7 @@ async def read_events(searchTerm: Union[str , None]):
 
     return query 
 
-@app.post("/set_cookie")
+@app.post("/set-cookie")
 async def set_cookie(request: Request, response: Response):
 
     data = await request.json()
@@ -65,3 +65,10 @@ async def set_cookie(request: Request, response: Response):
     response.headers["Host"] = request.headers.get("Host")
     return {"message": "Cookie set successfully"}
 
+@app.get("/get-cookie")
+async def get_cookie(request:Request):
+    # cookie is obtained in Request Obejct
+    cookies = request.cookies
+    print(cookies)
+    interests_cookie = cookies["interests"]
+    return interests_cookie
