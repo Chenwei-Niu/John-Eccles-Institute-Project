@@ -1,7 +1,7 @@
 
 import { useEffect, useState } from 'react';
 import styles from '../page.module.css';
-
+import SetCookieComponent from './SetCookieComponent';
 
 export default function SearchAndSeminarsComponent() {
   const [data, setData] = useState(null);
@@ -17,7 +17,14 @@ export default function SearchAndSeminarsComponent() {
       .catch(error => console.error(error));
   }, []);
 
-
+  const handleCookieUpdate= () =>{
+    fetch('http://127.0.0.1:8000/get-events',{
+      credentials: 'include' // This setting in crucial to add cookies to cross-domain request header
+    })
+      .then(response => response.json())
+      .then(json => setData(json))
+      .catch(error => console.error(error));
+  }
   const handleSearchInputChange = (event) => {
     console.log(searchTerm)
     setSearchTerm(event.target.value)
@@ -49,6 +56,7 @@ export default function SearchAndSeminarsComponent() {
   }
 
   return(
+    <><SetCookieComponent refreshEventList={handleCookieUpdate}/>
     <div className={styles.searchAndSeminarWrapper}>
       {/* <from className={styles.form} onSubmit={searchEvents}> */}
         <input className={styles.searchInput} 
@@ -61,7 +69,7 @@ export default function SearchAndSeminarsComponent() {
       }
 
     </div>
-    
+    </>
   )
 }
 
