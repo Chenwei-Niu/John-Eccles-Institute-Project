@@ -51,6 +51,10 @@ const BulkAddRecipientComponent = () => {
         {
             Header: 'Interests',
             accessor: 'interest'
+        },
+        {
+            Header: 'Error Message',
+            accessor: 'msg'
         }
     ], []);
 
