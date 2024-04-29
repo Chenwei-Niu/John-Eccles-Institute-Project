@@ -196,7 +196,7 @@ export default class TopComponent extends Component {
     }
     render(){
       return (
-        <div dangerouslySetInnerHTML={{__html: this.state.content}}></div>
+        <div dangerouslySetInnerHTML={{__html: this.state.content}} className='html front not-logged-in no-sidebars page-home anu-band domain-cecs acton section-home'></div>
       )
     }
   }
