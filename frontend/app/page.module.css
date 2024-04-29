@@ -48,12 +48,28 @@
   /* border: 1px solid #ccc; 可选：添加边框以突显容器 */
 }
 
-.cookieHostField {
-  width: 100%;
+.buttonsField {
   margin-top: 15px;
   display: flex;
   height: 30px;
+  justify-content: flex-start;
+}
+
+.cookieHostField {
+  display: inline-block;
+  width: 50%;
+
+  display: flex;
+  height: 30px;
   justify-content: flex-end;
+}
+
+.subscribeField {
+  display: inline-block;
+  width: 50%;
+  display: flex;
+  height: 30px;
+  justify-content: flex-start;
 }
 
 .cookieInputForm{

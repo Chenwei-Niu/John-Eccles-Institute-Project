@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import styles from '../page.module.css';
+import SubscribeComponent from './SubscribeComponent';
 
 function SetCookieComponent({refreshEventList}) {
     const [interests, setInterests] = useState('');
@@ -50,26 +51,32 @@ function SetCookieComponent({refreshEventList}) {
     };
 
     return (
-        <div className={styles.cookieHostField}>
-            {interests == "" || buttonFlag? 
-            
-                <><form onSubmit={handleSubmit} className={styles.cookieInputForm}>
-                    <label className={styles.cookieDisplay} htmlFor="interests">Interests:</label>
-                    <div className={`${styles.addTag} ${styles.cookieDisplay}`}>
-                        <span className={styles.cookieDisplay}>{interests == "" ? "Type your interests, separated by commas" : interests}</span>
-                        <input v-model={interests} className={styles.cookieDisplay} type="text" id="interests" name="interests" value={interests} placeholder={interests == "" ? "Type your interests, separated by commas" : interests} onChange={handleInterestsChange} />
-                    </div>
+        <div className={styles.buttonsField}>
+            <div className={styles.subscribeField}>
+                <SubscribeComponent/>
+            </div>
+            <div className={styles.cookieHostField}>            
+                {interests == "" || buttonFlag? 
+                
+                    <><form onSubmit={handleSubmit} className={styles.cookieInputForm}>
+                        <label className={styles.cookieDisplay} htmlFor="interests">Interests:</label>
+                        <div className={`${styles.addTag} ${styles.cookieDisplay}`}>
+                            <span className={styles.cookieDisplay}>{interests == "" ? "Type your interests, separated by commas" : interests}</span>
+                            <input v-model={interests} className={styles.cookieDisplay} type="text" id="interests" name="interests" value={interests} placeholder={interests == "" ? "Type your interests, separated by commas" : interests} onChange={handleInterestsChange} />
+                        </div>
 
 
 
-                    <button type="submit" className={styles.cookieDisplay}>Save Interests</button>
-                </form>
-                <button onClick={() => setButtonFlag(false)}>Back</button></>
-                :
-                <button onClick={() => setButtonFlag(true)}>Update Interests</button>
-            }
+                        <button type="submit" className={styles.cookieDisplay}>Save Interests</button>
+                    </form>
+                    <button onClick={() => setButtonFlag(false)}>Back</button></>
+                    :
+                    <button onClick={() => setButtonFlag(true)}>Update Interests</button>
+                }
 
+            </div>
         </div>
+
     );
 }
 
