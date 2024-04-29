@@ -17,9 +17,18 @@
     /* margin-bottom: 30px; */
     /* width: 100%; */
     border-bottom: 1px solid;    
-    padding: 20px;
+    padding: 15px 10px;
+    
+}
+.eventCard p {
+  margin-top: 5px;
+  margin-bottom: 5px;
+  padding: 0px;
 }
 
+.eventCard .dateAndVenue {
+  display: inline;
+}
 .form {
   width: 100%;
 }
@@ -39,7 +48,7 @@
 }
 
 .ellipsisDescriptionContainer {
-  margin-top: 15px;
+  margin-top: 10px;
   width: 100%; /* 设置容器的宽度 */
   white-space: pre-wrap;
   /* white-space: nowrap; 防止文本换行 */
@@ -107,4 +116,41 @@ input.cookieDisplay{
 .addTag{
   height: 28px;
   position: relative;
+}
+
+.nomargintop {
+  margin-top: 0px !important;
+  height: 100%;
+}
+.nomarginbottom {
+  margin-bottom: 0px !important;
+}
+.padtop {
+  padding-top: 20px !important;
+  margin-top: 0 !important;
+}
+
+.oneThird {
+  width: 29.1666%;
+  float: left;
+  margin: 20px;
+  display: table-cell;
+  vertical-align: middle;
+}
+
+.twoThird {
+  width: 62.5000%;
+  float: left;
+  margin: 20px;
+  display: inline;
+}
+.left {
+  float: left;
+}
+.right {
+  float: right;
+}
+
+.clear {
+  clear: both;
 }

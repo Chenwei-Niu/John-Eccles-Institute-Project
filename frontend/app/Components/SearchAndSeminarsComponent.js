@@ -45,13 +45,26 @@ export default function SearchAndSeminarsComponent() {
   const renderEvent = (item) => {
     return (
       <div key={item.id} className={styles.eventCard}>
-        <a href={`${item.url}`}>
-        <p className={styles.seminarTitle}>{`${item.title}`}</p>
-        <p>{`Date: ${item.date}`}</p>
-        <p>{`Venue: ${item.venue}`}</p>
-        <div className={styles.ellipsisDescriptionContainer}><p style={{fontWeight:650}}>{`Description:`}</p>{`${item.description}`}</div>
-        </a>
+        <div className={`${styles.left} ${styles.twoThird}`}>
+          <a href={`${item.url}`}>
+          <p className={styles.seminarTitle}>{`${item.title}`}</p>
+          
+          <p className={styles.dateAndVenue}style={{fontWeight:650}}>{`Date: `}</p><p className={styles.dateAndVenue}>{`${item.date}`}</p>
+          <div>
+            <p className={styles.dateAndVenue}style={{fontWeight:650}}>{`Venue: `}</p><p className={styles.dateAndVenue}>{`${item.venue}`}</p>
+          </div>
+          <div className={styles.ellipsisDescriptionContainer}><p style={{fontWeight:650}}>{`Description:`}</p>{`${item.description}`}</div>
+          </a>
+        </div>
+        <div className={`${styles.right} ${styles.oneThird} ${styles.nomargintop} ${styles.padtop} ${styles.nomarginbottom}`}>
+          <a href={`${item.url}`}> 
+            <img typeof="foaf:Image" src="https://jcsmr.anu.edu.au/files/styles/anu_doublenarrow_440_248/public/Samantha%20Barton%20copy.jpg?itok=Cek2oTxI" width="440" height="248" alt="Dr Samantha Barton"/>
+          </a>
+        </div>
+        <div className='clear'>
+        </div>
       </div>
+
     )
   }
 

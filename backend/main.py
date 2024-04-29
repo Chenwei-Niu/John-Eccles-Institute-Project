@@ -42,7 +42,11 @@ async def read_events(request:Request):
     # events = db.query(Event).order_by(asc(Event.standard_datetime)).all() # Test used only, past seminars would be displayed
 
     for event in events:
-        event.description = str(event.description).strip()[:300] + "..."
+        stripped_str = str(event.description).strip()
+        if len(stripped_str) > 300:
+            event.description = stripped_str[:300] + "..."
+        else:
+            event.description = stripped_str
 
     # prioritise seminars base on user's cookie
     interests = await get_cookie(request=request)
