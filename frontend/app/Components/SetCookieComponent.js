@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import styles from '../page.module.css';
 import SubscribeComponent from './SubscribeComponent';
+import ShowSelectedComponent from './ShowSelectedComponent';
 
 function SetCookieComponent({refreshEventList}) {
     const [interests, setInterests] = useState('');
@@ -54,6 +55,7 @@ function SetCookieComponent({refreshEventList}) {
         <div className={styles.buttonsField}>
             <div className={styles.subscribeField}>
                 <SubscribeComponent/>
+                <ShowSelectedComponent/>
             </div>
             <div className={styles.cookieHostField}>            
                 {interests == "" || buttonFlag? 

@@ -17,7 +17,7 @@
     /* margin-bottom: 30px; */
     /* width: 100%; */
     border-bottom: 1px solid;    
-    padding: 15px 10px;
+    padding: 10px 10px;
     
 }
 .eventCard p {
@@ -129,7 +129,10 @@ input.cookieDisplay{
   padding-top: 20px !important;
   margin-top: 0 !important;
 }
-
+.padbottom {
+  padding-bottom: 20px !important;
+  margin-bottom: 0 !important;
+}
 .oneThird {
   width: 29.1666%;
   float: left;
@@ -153,4 +156,57 @@ input.cookieDisplay{
 
 .clear {
   clear: both;
+}
+
+.tickBox {
+  width: 4.0000%;
+  margin-right: 10px;
+  display: table-cell;
+  vertical-align: middle;
+  margin-top: 4px;
+  margin-bottom: 5px;
+  
+}
+
+.infoBox {
+  width: 90%;
+}
+
+.backToTopBox{
+  position:fixed;
+  right:30px;
+  bottom: 30px;
+  height:40px;
+  width: 60px;    
+  text-align:center;
+  padding-top:25px;    
+  background-color: black;
+  border-radius: 20%;
+  overflow: hidden;
+}
+.backToTopBox:hover:before{
+  top:50%
+}
+.backToTopBox:hover .backToTopBoxIn{
+  visibility: hidden;
+}
+.backToTopBox:before{
+  position: absolute;
+  top: -50%;
+  left: 50%;
+  transform: translate(-50%,-50%);
+  content:'Back to Top';
+  width: 40px;
+  color:peru;
+  font-weight:bold;
+
+}    
+.backToTopBoxIn{
+  visibility: visible;
+  display:inline-block;
+  height:20px;
+  width: 20px;
+  border: 3px solid black;
+  border-color: white transparent transparent white;
+  transform:rotate(45deg);
 }
