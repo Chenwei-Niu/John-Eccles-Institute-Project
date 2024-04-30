@@ -3,7 +3,7 @@ import React, { useState,useEffect } from 'react';
 export default function SeminarCheckbox({ id, setData,selectedSeminars }) {
   const [isChecked, setIsChecked] = useState(false);
   useEffect(() => {
-    if (selectedSeminars.includes(id)) {
+    if (selectedSeminars && selectedSeminars.includes(id)) {
         setIsChecked(true);
       } else {
         setIsChecked(false);
