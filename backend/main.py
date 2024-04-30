@@ -101,6 +101,50 @@ async def get_cookie(request:Request):
         return interests_cookie
     else:
         return ""
+
+@app.post("/add-selected-seminars")
+async def set_selected_seminars(request: Request, response: Response):
+    data = await request.json()
+    selected = data.get("selected")
+    cookies = request.cookies
+    if "selected_id" in cookies:
+        existing_selected_list = string_to_list(cookies["selected_id"])
+
+        existing_selected_list.append(selected)
+        response.set_cookie(key="selected_id", value=existing_selected_list)
+        response.headers["Host"] = request.headers.get("Host")
+        return existing_selected_list
+    else:
+        response.set_cookie(key="selected_id", value=[selected])
+        response.headers["Host"] = request.headers.get("Host")
+        return [selected]
+    
+
+@app.post("/remove-selected-seminars")
+async def set_selected_seminars(request: Request, response: Response):
+    data = await request.json()
+    selected = data.get("selected")
+    cookies = request.cookies
+    if "selected_id" in cookies:
+        existing_selected_list = string_to_list(cookies["selected_id"])
+        print(existing_selected_list)
+        existing_selected_list.remove(selected)
+        response.set_cookie(key="selected_id", value=existing_selected_list)
+        response.headers["Host"] = request.headers.get("Host")
+        return existing_selected_list
+    else:
+        return None
+    
+@app.get("/get-selected-seminars")
+async def set_selected_seminars(request: Request, response: Response):
+    cookies = request.cookies
+    if "selected_id" in cookies:
+        existing_selected_list = string_to_list(cookies["selected_id"])
+        print(existing_selected_list)
+        response.headers["Host"] = request.headers.get("Host")
+        return existing_selected_list
+    else:
+        return None
     
 # Helper Function
 def get_event_index_by_eventID(events:List[Event],event_id):
@@ -109,3 +153,11 @@ def get_event_index_by_eventID(events:List[Event],event_id):
             return i
     else:
         return None
+
+def string_to_list(string:str):
+    if string == None or string == "" or string == "[]":
+        return []
+    elif ',' not in string :
+        return [string[2:-2]]
+    else:
+        return [x.strip() for x in string[1:-1].replace("'","").split(',')]

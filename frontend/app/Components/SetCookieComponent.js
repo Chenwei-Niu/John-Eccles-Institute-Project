@@ -3,7 +3,7 @@ import styles from '../page.module.css';
 import SubscribeComponent from './SubscribeComponent';
 import ShowSelectedComponent from './ShowSelectedComponent';
 
-function SetCookieComponent({refreshEventList}) {
+function SetCookieComponent({refreshEventList,showSelectedFlag,setShowSelectedFlag}) {
     const [interests, setInterests] = useState('');
     const [buttonFlag, setButtonFlag] = useState(false);
     const [updateCookieFlag, setUpdateCookieFlag] = useState(false);
@@ -55,7 +55,7 @@ function SetCookieComponent({refreshEventList}) {
         <div className={styles.buttonsField}>
             <div className={styles.subscribeField}>
                 <SubscribeComponent/>
-                <ShowSelectedComponent/>
+                <ShowSelectedComponent setShowSelectedFlag={setShowSelectedFlag} showSelectedFlag={showSelectedFlag}/>
             </div>
             <div className={styles.cookieHostField}>            
                 {interests == "" || buttonFlag? 

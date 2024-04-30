@@ -2,19 +2,41 @@
 import { useEffect, useState } from 'react';
 import styles from '../page.module.css';
 import SetCookieComponent from './SetCookieComponent';
+import SeminarCheckbox from './SeminarCheckBox';
 
 export default function SearchAndSeminarsComponent() {
   const [data, setData] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
   const [searchResult, setSearchResult] = useState([]);
+  const [selectedSeminars, setSelectedSeminars] = useState([]);
+  const [showSelectedFlag, setShowSelectedFlag] = useState(false);
   
   useEffect(() => {
-    fetch('http://127.0.0.1:8000/get-events',{
-      credentials: 'include' // This setting in crucial to add cookies to cross-domain request header
-    })
-      .then(response => response.json())
-      .then(json => setData(json))
-      .catch(error => console.error(error));
+    console.log(selectedSeminars)
+    const fetchData = async () => {
+      try {
+        // First fetch request
+        await fetch('http://127.0.0.1:8000/get-events',{
+          credentials: 'include' // This setting in crucial to add cookies to cross-domain request header
+        }).then(response => response.json())
+          .then(json => setData(json))
+          .catch(error => console.error(error));
+
+        // Second fetch request for cookies
+        await fetch('http://127.0.0.1:8000/get-selected-seminars',{
+            credentials: 'include' // This setting in crucial to add cookies into browser
+        })
+        .then(response => response.json())
+        .then(json => setSelectedSeminars(json))
+        .catch(error => console.error(error));
+
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    };
+
+    fetchData();
+
   }, []);
 
   const handleCookieUpdate= () =>{
@@ -61,12 +83,28 @@ export default function SearchAndSeminarsComponent() {
         });
   }
 
+  const renderEventById = (id, data) => {
+    var event_card;
+    data.forEach((value,key,map)=>{
+      if (value.id == id){
+        event_card = renderEvent(value);
+      }
+      
+    })
+    return event_card;
+
+  }
+
   const renderEvent = (item) => {
     return (
       <div key={item.id} className={styles.eventCard}>
         <div className={`${styles.left} ${styles.twoThird}`}>
           <div className={`${styles.left} ${styles.tickBox}`}>
-            <input type="checkbox" style={{float:'left', zoom:'200%'}}/>
+            <SeminarCheckbox
+              id={`${item.id}`} 
+              setData = {setSelectedSeminars}
+              selectedSeminars={selectedSeminars}
+            />
           </div>
           <div className={`${styles.left} ${styles.infoBox}`}>
             <a href={`${item.url}`}>
@@ -94,7 +132,7 @@ export default function SearchAndSeminarsComponent() {
   }
 
   return(
-    <><SetCookieComponent refreshEventList={handleCookieUpdate}/>
+    <><SetCookieComponent refreshEventList={handleCookieUpdate} showSelectedFlag={showSelectedFlag} setShowSelectedFlag={setShowSelectedFlag}/>
     <div className={styles.searchAndSeminarWrapper}>
       {/* <from className={styles.form} onSubmit={searchEvents}> */}
         <input className={styles.searchInput} 
@@ -103,7 +141,11 @@ export default function SearchAndSeminarsComponent() {
           onChange={handleSearchInputChange} />
       {/* </from> */}
       {searchTerm ? searchResult.map(event => renderEvent(event)): 
-        data ? data.map(event => renderEvent(event)) : 'loading...'
+        data ? 
+          showSelectedFlag ? 
+            selectedSeminars.map(id => renderEventById(id,data)): 
+          data.map(event => renderEvent(event)) 
+        : 'loading...'
       }
       <div className={styles.backToTopBox} onClick={handleBackToTop}>
         <div className={styles.backToTopBoxIn}></div>
