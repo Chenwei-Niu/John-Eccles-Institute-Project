@@ -107,7 +107,7 @@ class EventSpider(scrapy.Spider):
                 # if the dictionary doesn't contain the name, and the text doesn't contain numbers,
                 # then add it into the dictionary
                 if entity.text not in temp_dict and not bool(re.search(r'\d',entity.text)):
-                    temp_dict[entity.text] = 2 if entity.text.count(" ") == 1 else 1 
+                    temp_dict[entity.text] = 3 if entity.text.count(" ") == 1 else 1 # Give name with two words the highest priority
         
         if len(temp_dict) != 0:
             return max(temp_dict, key= temp_dict.get)
