@@ -103,3 +103,36 @@ class EmailMain:
         seminar.find(id="LOCATION_PLACEHOLDER").string = event.venue if event.venue else "None"
         seminar.find(id="DESCRIPTION_PLACEHOLDER").string = str(event.description)[:300] + "..."
         return seminar
+
+    # ------------------------
+    def generate_evaluation_emails(self):
+        curr_time = dt.datetime.now()
+        time_delta = dt.timedelta(days=14)
+
+        event_lst = self.db.query(Event.id, Event.description, Event.title, Event.venue, Event.date, Event.url,
+                                  Scholar.name).join(Scholar).filter(
+                                    #   Event.standard_datetime > curr_time,
+                                    #   Event.is_seminar == True
+                                      )
+        # for i in event_lst:
+        #     print(i)
+        # return 0
+        recommend_system = RecommenderSystem()
+        interested_seminar_lst = recommend_system.getSeminarsOfPossibleInterest()
+        for key in interested_seminar_lst:
+            self.bs_index.find(id="LETTER_DATE").string = curr_time.strftime("%d %B, %Y")
+            html_body = deepcopy(self.bs_index)
+            # html_body = BeautifulSoup(self.html_file, 'html.parser')
+            # print(str(html_body))
+            target_text = html_body.find("p", {"id": "seminars"})
+            for event_id in interested_seminar_lst[key]:
+                for event in event_lst:
+                    if event.id == event_id:
+                        seminar = self.fillEventIntoHtml(event)
+                        target_text.append(seminar)
+
+            # "../example_modified.html" for tests
+            recipient_name = self.db.query(Recipient.name).filter(Recipient.id == key).first().name
+            with open(sys.path[-1] +"/tests/" +recipient_name+" threshold-"+str(int(threshold*100))+".html", "wb") as f_output:
+                f_output.write(html_body.prettify("utf-8"))
+            # webbrowser.open(sys.path[-1] +"/example_modified.html", new=2) # The new=2 parameter means opening in a new window or tab.

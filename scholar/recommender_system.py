@@ -1,7 +1,8 @@
 from backend.models import *
 import spacy
 from queue import PriorityQueue as PQ
-
+import os
+os.environ['TF_ENABLE_ONEDNN_OPTS'] = '0'
 word2vector_nlp = spacy.load("en_core_web_lg")
 threshold = 0.75 # used in getSeminarsOfPossibleInterest() function, 
                  # used for newletter generation

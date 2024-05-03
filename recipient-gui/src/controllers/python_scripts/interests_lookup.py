@@ -6,10 +6,7 @@ sys.path.append(str(path.parent.parent.parent.parent.absolute()))
 from scholarly import scholarly, ProxyGenerator
 from backend.models import *
 from scholar.Process_scholar import Process_scholar, RECIPIENT_QUERY_LIMIT, SCHOLAR_QUERY_LIMIT
-import spacy
 
-nlp = spacy.load("en_core_web_sm")
-word2vector_nlp = spacy.load("en_core_web_lg")
 
 process_scholar = Process_scholar()
 pg = ProxyGenerator()
