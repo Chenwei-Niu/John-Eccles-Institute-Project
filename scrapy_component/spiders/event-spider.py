@@ -37,12 +37,12 @@ class EventSpider(scrapy.Spider):
     def parse_event(self, response):
         event_info = response.meta.get("event_info")
         title = response.xpath(event_info['title']).get()
-        description, is_seminar = self.get_description(response,event_info,title)
-        keywords = ", ".join(Keywords_extractor.extract_keywords(description))
+        abstract, description, is_seminar = self.get_description(response,event_info,title)
+        keywords = ", ".join(Keywords_extractor.extract_keywords(abstract))
         scholar_object = self.scholar_object(response,description,event_info,keywords,title)
         event_data = {
             "title": title,
-            "description": description.strip(),
+            "description": abstract.strip(),
             "date": ''.join(response.xpath(event_info['date']).extract()),
             "venue": response.xpath(event_info['venue']).get(),
             "keywords":keywords,
@@ -69,7 +69,7 @@ class EventSpider(scrapy.Spider):
         else:
             description = ''.join(description)
         is_seminar = self.determine_event_type(description,title) # Determine whether this event is a seminar
-        return Keywords_extractor.getAbstract(description), is_seminar
+        return Keywords_extractor.getAbstract(description), description, is_seminar
     
     def get_speaker(self, response, description, event_info,title):
         # if there is a presenter HTML tag, then use it
