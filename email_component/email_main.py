@@ -104,7 +104,7 @@ class EmailMain:
         seminar.find(id="DESCRIPTION_PLACEHOLDER").string = str(event.description)[:300] + "..."
         return seminar
 
-    # ------------------------
+    # ------------------------------------------------------------
     def generate_evaluation_emails(self):
         curr_time = dt.datetime.now()
         time_delta = dt.timedelta(days=14)
@@ -114,9 +114,7 @@ class EmailMain:
                                     #   Event.standard_datetime > curr_time,
                                     #   Event.is_seminar == True
                                       )
-        # for i in event_lst:
-        #     print(i)
-        # return 0
+
         recommend_system = RecommenderSystem()
         interested_seminar_lst = recommend_system.getSeminarsOfPossibleInterest()
         for key in interested_seminar_lst:
