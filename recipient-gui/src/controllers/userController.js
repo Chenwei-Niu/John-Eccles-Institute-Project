@@ -90,7 +90,7 @@ const deleteUser = async (req, res) => {
 const fetchInterets = async (req, res) => {
     try {
       // 调用 Python 脚本进行查询
-      const pythonProcess = spawn('python', [path.join(__dirname,__script_dir,'interests_lookup.py')]);
+      const pythonProcess = spawn('python', [path.join(__dirname,__script_dir,'interests_lookup.py'), "recipient"]);
   
       pythonProcess.stdout.on('data', (data) => {
         const result = data.toString().trim();

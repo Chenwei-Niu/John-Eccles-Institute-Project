@@ -18,7 +18,7 @@ biography_formats = [
     r'Bio\s?:?\s?(.*)',
     r'Bio\s?:?\s?\n+(.*)',
 ]
-SCHOLAR_QUERY_LIMIT = 20
+SCHOLAR_QUERY_LIMIT = 15
 RECIPIENT_QUERY_LIMIT = 10
 
 university_feature_words = ["University", "College", "Uni", "U", "Institution", "of", "Institute"]

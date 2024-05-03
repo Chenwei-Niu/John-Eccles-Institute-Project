@@ -5,7 +5,7 @@ sys.path.append(str(path.parent.parent.parent.parent.absolute()))
 
 from scholarly import scholarly, ProxyGenerator
 from backend.models import *
-from scholar.Process_scholar import Process_scholar, RECIPIENT_QUERY_LIMIT
+from scholar.Process_scholar import Process_scholar, RECIPIENT_QUERY_LIMIT, SCHOLAR_QUERY_LIMIT
 import spacy
 
 nlp = spacy.load("en_core_web_sm")
@@ -20,6 +20,12 @@ __session = Session()
 def fetch_new_added_recipients():
     result = []
     result = __session.query(Recipient).filter(Recipient.interest == []).all()
+    return result
+
+def fetch_presenters_with_no_interests():
+    result = []
+    result = __session.query(Scholar).filter(Scholar.interest == []).all()
+    result = [x for x in result if x.name and x.name != "" and x.name != "None"]
     return result
 
 def parse_name_from_email(email:str):
@@ -45,7 +51,7 @@ def parse_org_from_email(email:str):
 
 
 
-def fetch_information_by_scholarly(recipient:Recipient):
+def fetch_recipient_information_by_scholarly(recipient:Recipient):
     if recipient.name == "": 
         search_name = parse_name_from_email(recipient.email)
     else:
@@ -67,22 +73,54 @@ def fetch_information_by_scholarly(recipient:Recipient):
             if "anu" in k["email_domain"]:
                 return search_name, search_org, k['interests']
         print("No one is from ANU")
+        return search_name, search_org, possible_scholars[0]['interests'] # If not one is from ANU, returns the top listed person
     else:  # there is no such a person on Google Scholar
         print("No such person on Google Scholar")
-        return search_name, search_org, ["no results from Google Scholar"]
+        return search_name, search_org, ["-"]
+
+def fetch_presenter_information_by_scholarly(presenter:Scholar):
+
+    search_name = presenter.name
+    search_org = presenter.organization
+
+    possible_scholars = process_scholar.get_candidates_by_name_and_org(search_name,search_org,SCHOLAR_QUERY_LIMIT)
+    schoalar_list_length = len(possible_scholars)
+    print("Length of candidates list is", schoalar_list_length)
+    if schoalar_list_length == 1:  # only one result, that's the person
+        # print(possible_scholars[0]['interests'])
+        return search_name, search_org, possible_scholars[0]['interests'], possible_scholars[0]["scholar_id"]
+    elif schoalar_list_length > 1:
+        for k in possible_scholars:  # we give ANU people priority
+            if "anu" in k["email_domain"]:
+                return search_name, search_org, k['interests']
+        print("No one is from ANU")
+        return search_name, search_org, possible_scholars[0]['interests'], possible_scholars[0]["scholar_id"] # If not one is from ANU, returns the top listed person
+    else:  # there is no such a person on Google Scholar
+        print("No such person on Google Scholar")
+        return search_name, search_org, ["Not Found"], None
 
 
-
-
-
-new_added_recipient_list = fetch_new_added_recipients()
-if len(new_added_recipient_list) > 0:
-    for recipient in new_added_recipient_list:
-        name, org, interests = fetch_information_by_scholarly(recipient)
-        recipient.name = name
-        recipient.organization = org
-        recipient.interest = interests
-        __session.commit()
-        print(recipient)
+if sys.argv[1] == "recipient":
+    new_added_recipient_list = fetch_new_added_recipients()
+    if len(new_added_recipient_list) > 0:
+        for recipient in new_added_recipient_list:
+            name, org, interests = fetch_recipient_information_by_scholarly(recipient)
+            recipient.name = name
+            recipient.organization = org
+            recipient.interest = interests
+            __session.commit()
+            print(recipient)
+elif sys.argv[1] == "presenter":
+    presenters_with_no_interests = fetch_presenters_with_no_interests()
+    if len(presenters_with_no_interests) > 0:
+        for presenter in presenters_with_no_interests:
+            name,org,interests,scholar_id = fetch_presenter_information_by_scholarly(presenter)
+            presenter.name = name
+            presenter.organization = org
+            presenter.interest = interests
+            if scholar_id:
+                presenter.google_scholar_id = scholar_id
+            __session.commit()
+            print(presenter)
 
         
