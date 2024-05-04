@@ -139,7 +139,8 @@ class Process_scholar:
 
     # This Function is for external scholar
     def get_scholar_instance(self, name: str, keywords: str):
-
+        if name == None or name == "" or name == "None" or "&" in name: # Do not waste time to fetch if the name is None or empty or contains '&'
+            return {}
         possible_scholars = self.get_candidates_by_name(name,SCHOLAR_QUERY_LIMIT)
         schoalar_list_length = len(possible_scholars)
         print("Length of candidates list is", schoalar_list_length)

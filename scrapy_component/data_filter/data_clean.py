@@ -11,6 +11,8 @@ DEFAULT_VALUE = 'To be confirmed'
 # standard_datetime_regex to match only date, for formatting into standard datetime
 standard_datetime_regex = r"\b(?:\d{1,2}\s(?:Jan(?:uary)?|Feb(?:ruary)?|Mar(?:ch)?|Apr(?:il)?|May|Jun(?:e)?|Jul(?:y)?|Aug(?:ust)?|Sep(?:tember)?|Oct(?:ober)?|Nov(?:ember)?|Dec(?:ember)?)|(?:Jan(?:uary)?|Feb(?:ruary)?|Mar(?:ch)?|Apr(?:il)?|May|Jun(?:e)?|Jul(?:y)?|Aug(?:ust)?|Sep(?:tember)?|Oct(?:ober)?|Nov(?:ember)?|Dec(?:ember)?)\s\d{1,2})\s\d{4}\b"
 
+# Spacy default tokenizer always include '-' in the token, this pattern is to remove content behind '-' 
+presenter_name_pattern = r"^(.*?)-"
 class Data_Cleaner:
     def __init__(self) -> None:
         pass
@@ -66,3 +68,11 @@ class Data_Cleaner:
         event_data["venue"] = self.clean_venue(event_data["venue"])
         event_data["standard_datetime"] = self.format_datetime(event_data["date"])
         return event_data
+    
+    def clean_presenter_name(self,name:str):
+        match = re.search(presenter_name_pattern, name)
+        if match:
+            result = match.group(1)
+            return result.strip()
+        else:
+            return name

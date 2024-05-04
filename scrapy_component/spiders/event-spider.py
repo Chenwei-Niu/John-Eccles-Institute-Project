@@ -9,7 +9,7 @@ import scrapy_component.items as items
 import spacy
 import re
 
-english_nlp = spacy.load('en_core_web_sm')
+english_nlp = spacy.load('en_core_web_lg')
 scholar_helper = Process_scholar()
 data_cleaner = Data_Cleaner()
 class EventSpider(scrapy.Spider):
@@ -110,7 +110,8 @@ class EventSpider(scrapy.Spider):
                     temp_dict[entity.text] = 3 if entity.text.count(" ") == 1 else 1 # Give name with two words the highest priority
         
         if len(temp_dict) != 0:
-            return max(temp_dict, key= temp_dict.get)
+            scholar_name = max(temp_dict, key= temp_dict.get)
+            return data_cleaner.clean_presenter_name(scholar_name)
         else:
             return "None"
     
