@@ -120,9 +120,10 @@ export default function SearchAndSeminarsComponent() {
 
         </div>
         <div className={`${styles.right} ${styles.oneThird} ${styles.nomargintop} ${styles.padtop} ${styles.padbottom} ${styles.nomarginbottom}`}>
-          <a href={`${item.url}`}> 
-            <img typeof="foaf:Image" src="https://jcsmr.anu.edu.au/files/styles/anu_doublenarrow_440_248/public/Samantha%20Barton%20copy.jpg?itok=Cek2oTxI" width="440" height="248" alt="Dr Samantha Barton"/>
-          </a>
+          {item.image_url ? <a href={`${item.url}`}> 
+            <img typeof="foaf:Image" src={`${item.image_url}`} width="440" height="248"/>
+          </a>:<></>
+          }
         </div>
         <div className='clear'>
         </div>

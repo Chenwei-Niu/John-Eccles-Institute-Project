@@ -76,3 +76,12 @@ class Data_Cleaner:
             return result.strip()
         else:
             return name
+        
+    def assemble_image_url(self,url,image_url,domain): # We assume that the image should be stored under the same domain
+        if not image_url: # passed in parameter is None, then directly return None
+            return None
+        if url and image_url:
+            if domain in image_url:
+                return image_url
+            else:
+                return url + image_url

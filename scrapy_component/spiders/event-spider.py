@@ -32,7 +32,7 @@ class EventSpider(scrapy.Spider):
             # some urls do not include the domain, if there isn't a scheme and domain, we add it on
             if page_config["domain"] not in url:
                 url = page_config["domain"] + url
-            yield Request(url, callback=self.parse_event, meta={"event_info": page_config['xpath']['event_info'], "url":url, "curr_time":curr_time})
+            yield Request(url, callback=self.parse_event, meta={"event_info": page_config['xpath']['event_info'], "url":url, "curr_time":curr_time, "domain":page_config["domain"]})
 
     def parse_event(self, response):
         event_info = response.meta.get("event_info")
@@ -40,6 +40,8 @@ class EventSpider(scrapy.Spider):
         abstract, description, is_seminar = self.get_description(response,event_info,title)
         keywords = ", ".join(Keywords_extractor.extract_keywords(abstract))
         scholar_object = self.scholar_object(response,description,event_info,keywords,title)
+        url = response.meta.get("url")
+        image_url = data_cleaner.assemble_image_url(url,response.xpath(event_info['image_url']).get(),response.meta.get("domain"))
         event_data = {
             "title": title,
             "description": abstract.strip(),
@@ -47,7 +49,8 @@ class EventSpider(scrapy.Spider):
             "venue": response.xpath(event_info['venue']).get(),
             "keywords":keywords,
             "organization": scholar_object['organization'],
-            "url":response.meta.get("url"),
+            "url":url,
+            "image_url": image_url,
             "access_date": response.meta.get("curr_time"),
             "is_seminar": is_seminar
         }
