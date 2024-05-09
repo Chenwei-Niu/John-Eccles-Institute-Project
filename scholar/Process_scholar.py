@@ -84,7 +84,8 @@ class Process_scholar:
             query = '"' + name + '"'
         else:
             query = '"' + name + '", ' + organization
-
+        pg.FreeProxies()
+        scholarly.use_proxy(pg)
         search_query = scholarly.search_author(query)
         possible_scholars = []
         while True:
@@ -96,13 +97,17 @@ class Process_scholar:
                 possible_scholars.append(scholar_result)
                 query_limit -= 1
                 if query_limit <= 0:
+                    print("Exceeds the query limit number and jumps out of the loop")
                     break
             except StopIteration:
+                print("Scholarly Exception. unknown problem encountered (may be IP temporarily banned or proxy problem)")
                 break
         return possible_scholars
 
     def get_candidates_by_name(self, name: str, query_limit:int):
         query = '"' + name + '"'
+        pg.FreeProxies()
+        scholarly.use_proxy(pg)
         search_query = scholarly.search_author(query)
         possible_scholars = []
         while True:
@@ -114,8 +119,10 @@ class Process_scholar:
                 possible_scholars.append(scholar_result)
                 query_limit -= 1
                 if query_limit <= 0:
+                    print("Exceeds the query limit number and jumps out of the loop")
                     break
             except StopIteration:
+                print("Scholarly Exception. unknown problem encountered (may be IP temporarily banned or proxy problem)")
                 break
         return possible_scholars
 

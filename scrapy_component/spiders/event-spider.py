@@ -133,12 +133,18 @@ class EventSpider(scrapy.Spider):
 
     def scholar_object(self,response,description:str,event_info,keywords,title):
         name = self.get_speaker(response,description,event_info,title)
-        
-        # try: # Scholarly: exceeding maximum number of tries, the Google Scholar tempororily banned current IP
-        #     scholar = scholar_helper.get_scholar_instance(name,keywords)
-        # except:
-        #     scholar = {}
-        scholar = {} # Test purpose only, delete after test
+        if self.mode == "scholarly":
+            print("\nScholarly is invoked")
+            try: # Scholarly: exceeding maximum number of tries, the Google Scholar tempororily banned current IP
+                scholar = scholar_helper.get_scholar_instance(name,keywords)
+                print("scholar is:", scholar)
+            except:
+                scholar = {}
+                print("An exception occured when using Scholarly -- search_author() or scholarly.next(Author)")
+        elif self.mode == "default":
+            scholar = {}
+        else:
+            scholar = {}
 
         if (len(scholar) == 0): # cannot search such a person on Google Scholar
             organization = scholar_helper.get_organization(description)

@@ -14,7 +14,7 @@ def db_connect():
 
 def create_table(engine):
     Base.metadata.create_all(engine)
-    print("创建完表")
+    print("Finished table creation")
 
 class Event(Base):
     __tablename__ = "event"
@@ -51,11 +51,11 @@ class Scholar(Base):
     organization = Column(Text())
     events = relationship('Event', backref='scholar', lazy=False)
     
-print("Start listen event table 'after create'")
+# print("Start listen event table 'after create'")
 event.listen(Event.__table__, 'after_create',  DDL("""CREATE INDEX idx_events_search_vector ON event USING gin(
 to_tsvector('english', COALESCE(title, '') || ' ' || COALESCE(description, '') || ' ' || COALESCE(venue, '') || ' ' || COALESCE(date::text, '') )
 )"""))
 event.listen(Scholar.__table__, 'after_create', DDL("""CREATE INDEX idx_scholar_search_vector ON scholar USING gin(to_tsvector('english', name))"""))
-print("Finish listen event table 'after create'")
+# print("Finish listen event table 'after create'")
 
 

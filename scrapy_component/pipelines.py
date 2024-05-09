@@ -30,8 +30,9 @@ class SaveToDatabase:
         This method is called for every item pipeline component
         """
         session = self.Session()
-        exist_scholar = session.query(Scholar).filter(Scholar.name == item["scholar"]["name"]).filter(
+        exist_scholar = session.query(Scholar).filter(Scholar.name == item["scholar"]["name"],
             Scholar.google_scholar_id == item["scholar"]["google_scholar_id"]).first()
+        print('There is an existing scholar in database')
         exist_event = session.query(Event).filter(Event.title == item["event"]["title"]).first()
         if exist_scholar == None:
             scholar = Scholar()
@@ -39,9 +40,13 @@ class SaveToDatabase:
             scholar.google_scholar_id = item["scholar"]["google_scholar_id"]
             scholar.organization = item["scholar"]["organization"]
             scholar.interest = item["scholar"]["interest"]
-            session.add(scholar)
-            session.flush()
-            session.refresh(scholar)
+            try:
+                session.add(scholar)
+                session.flush()
+                session.refresh(scholar)
+            except:
+                session.rollback()
+                raise
         if exist_event == None:
             event = Event()
             event.title = item["event"]["title"]
