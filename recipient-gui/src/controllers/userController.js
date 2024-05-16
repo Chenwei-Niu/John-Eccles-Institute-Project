@@ -202,6 +202,8 @@ const insertUserInBulk = (req, res) => {
     } else if (err) {
       // other error
       res.status(500).send({ message: 'other error' });
+    } else if (req.file == null){
+      res.status(500).send({ message: 'No file was selected' });
     } else {
       // Read from the uploaded file
       const workbook = xlsx.readFile(req.file.path);
