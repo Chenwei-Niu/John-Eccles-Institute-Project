@@ -18,14 +18,12 @@ def create_table(engine):
 
 class Event(Base):
     __tablename__ = "event"
-
     id = Column(Integer, primary_key=True, autoincrement=True)
     title = Column(Text())
     description = Column(Text())
     date = Column(Text())
     venue = Column(Text())
     speaker = Column(Integer,ForeignKey("scholar.id", onupdate="CASCADE",ondelete="CASCADE"))
-    # speaker:relationship("scholar", lazy="joined", cascade="all, delete-orphan")
     keywords = Column(Text())
     organization = Column(Text())
     url = Column(Text())
