@@ -1,3 +1,9 @@
+"""
+The code within this file was edited from
+Li, X. (2018) Huanyannizu/c-value-term-extraction, GitHub. 
+Available at: https://github.com/huanyannizu/C-Value-Term-Extraction 
+(Accessed: 24 May 2024). 
+"""
 import math
 
 class NoName:
