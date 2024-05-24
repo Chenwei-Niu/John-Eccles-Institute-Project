@@ -62,7 +62,7 @@ const TableComponent = ({data, refreshTable}) => {
   } = useTable({ columns, data }, useEditable);
 
   const handleRowClick = (row) => {
-    // 处理行点击事件
+    // Handling row click events
     setSelectedRow(row.id === selectedRow ? null : row.id);
     setFormData({
         email:row.values.email, 
@@ -74,20 +74,19 @@ const TableComponent = ({data, refreshTable}) => {
   };
 
   const handleDelete = async (id) => {
-    // 处理删除按钮点击事件
+    // Handle delete button click event
     console.log('Delete button clicked for id:', id);
-    // 弹出确认对话框
+    // Confirmation dialog box pops up
     const isConfirmed = window.confirm('Are you sure to delete this recipient?');
 
-    // 如果用户点击确认，则执行删除操作
+    // If the user clicks confirm, the delete operation is performed
     if (isConfirmed) {
-        // 执行删除逻辑
-        // 可以调用删除用户的 API 或其他相应的操作
+        // Execute deletion logic
         const response = await axios.post('http://localhost:3001/users/delete', {id: id});
         console.log('Deleted ', response);
         refreshTable();
     } else {
-        // 用户点击取消，不执行删除操作
+        // The user clicks Cancel without performing the deletion operation.
         console.log('Cancelled');
     }
     
@@ -95,7 +94,7 @@ const TableComponent = ({data, refreshTable}) => {
 
   const handleUpdate = async () => {
     try {
-      // 验证邮箱
+      // Verify email
       if (!formData.email) {
         alert('Email is required');
         return;
@@ -104,7 +103,7 @@ const TableComponent = ({data, refreshTable}) => {
         alert('Email is invalid, please check and try again.');
         return;
       }
-      // 弹出确认对话框
+      // Confirmation dialog box pops up
       const isConfirmed = window.confirm('Are you sure to update this recipient?');
 
       if(isConfirmed){
@@ -112,18 +111,18 @@ const TableComponent = ({data, refreshTable}) => {
         if (Array.isArray(formData.interest)){
             formData.interest = formData.interest.join(', ')
         }
-        // 发送update请求到服务器
+        // Send an update request to the server
         const response = await axios.post('http://localhost:3001/users/update', formData, {
             headers: {
                 'Content-Type': 'application/json',
             },
         });
 
-        // 处理update成功的逻辑
+        // Logic to handle update success
         console.log('User updated:', response.data);
         refreshTable();
       } else {
-        // 用户点击取消，不执行删除操作
+        // The user clicks Cancel without performing the deletion operation.
         console.log('Cancelled');
     }
 

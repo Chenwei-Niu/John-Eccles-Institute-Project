@@ -4,12 +4,12 @@ const __script_dir = "python_scripts";
 
 const generateEmail = async (req, res) => {
     try {
-      // 调用 Python 脚本进行查询
+      // Call Python script to query
       const pythonProcess = spawn('python', [path.join(__dirname,__script_dir,'email_verify.py')]);
   
       pythonProcess.stdout.on('data', (data) => {
         const result = data.toString().trim();
-        // 处理查询结果，可以返回给前端或执行其他操作
+        // Process query results, which can be returned to the front end or perform other operations
         res.json({ message: 'Email generates successfully', result });
       });
   
@@ -31,12 +31,12 @@ const generateEmail = async (req, res) => {
 
 const sendEmail = async (req, res) => {
   try {
-    // 调用 Python 脚本进行查询
+    // Call Python script to query
     const pythonProcess = spawn('python', [path.join(__dirname,__script_dir,'send_emails.py')]);
 
     pythonProcess.stdout.on('data', (data) => {
       const result = data.toString().trim();
-      // 处理查询结果，可以返回给前端或执行其他操作
+      // Process query results, which can be returned to the front end or perform other operations
       res.json({ message: 'Send Emails', result });
     });
 

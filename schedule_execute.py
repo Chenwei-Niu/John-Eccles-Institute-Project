@@ -1,11 +1,7 @@
 import schedule
 import datetime
 import os
-from scrapy import cmdline
-import time
 import sys
-import pandas as pd
-from scholar import Process_scholar
 from email_component.email_main import *
 
 SCHOLAR_NUMBER = 0
@@ -26,28 +22,6 @@ def execute_crawler():
         os.system("scrapy crawl event-spider -a mode=default") # default mode will not fetch speakers interests using Scholarly
                                                                # to avoid being banned by Google Scholar and interrupt the whole crawling process.
     print("Crawl finished: " + str(datetime.datetime.now()))
-
-
-"""
-Once a week, check if there is new scholar added,
-If any recipient has been deleted, the database could also keep track of that
-"""
-
-
-def update_scholar():
-    global SCHOLAR_NUMBER
-    ps = Process_scholar.Process_scholar()
-    df = pd.read_csv('static/recipient_list/recipient_emails.csv')
-    length = len(df)
-    if length < SCHOLAR_NUMBER:  # someone unsubscribes the email
-        # need to modify database, make is_recipient attribute false
-        # ....
-        ps.remove_recipient_from_email(df.loc[0:length])
-        SCHOLAR_NUMBER = length
-
-    if length > SCHOLAR_NUMBER:
-        ps.add_recipient_from_email(df.loc[SCHOLAR_NUMBER:length])
-        SCHOLAR_NUMBER = length
 
 
 """

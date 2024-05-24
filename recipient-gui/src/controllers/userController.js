@@ -1,6 +1,6 @@
 // userController.
 const { spawn } = require('child_process');
-const {pool} = require('../models/db'); // 使用你的数据库连接配置
+const {pool} = require('../models/db');
 const path = require('path');
 const multer = require('multer');
 const xlsx = require('xlsx');
@@ -11,7 +11,7 @@ const insertUser = async (req, res) => {
     console.log(req.body)
     const { email, name, organization, interest } = req.body;
 
-    // 验证邮箱是否存在
+    // Verify that the email address exists
     if (!email) {
       return res.status(400).json({ error: 'Email is required' });
     }
@@ -23,7 +23,7 @@ const insertUser = async (req, res) => {
         interestArray = '{}';
     }
 
-    // 在数据库中插入用户数据
+    // Insert user data into database
     const result = await pool.query(
       'INSERT INTO recipient (email, name, organization, interest, is_recipient) VALUES ($1, $2, $3, $4, $5) RETURNING *',
       [email, name, organization, interestArray , true]
@@ -89,12 +89,12 @@ const deleteUser = async (req, res) => {
 
 const fetchInterets = async (req, res) => {
     try {
-      // 调用 Python 脚本进行查询
+      // Call Python script to query
       const pythonProcess = spawn('python', [path.join(__dirname,__script_dir,'interests_lookup.py'), "recipient"]);
   
       pythonProcess.stdout.on('data', (data) => {
         const result = data.toString().trim();
-        // 处理查询结果，可以返回给前端或执行其他操作
+        // Process query results, which can be returned to the front end or perform other operations
         res.json({ message: 'Interests fetched successfully', result });
       });
   

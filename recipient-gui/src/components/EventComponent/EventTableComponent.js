@@ -65,7 +65,7 @@ const PresenterTableComponent = ({data, refreshTable}) => {
   } = useTable({ columns, data });
 
   const handleRowClick = (row) => {
-    // 处理行点击事件
+    // Handling row click events
     setSelectedRow(row.id === selectedRow ? null : row.id);
     setFormData({
         title:row.values.title, 
@@ -81,20 +81,20 @@ const PresenterTableComponent = ({data, refreshTable}) => {
   };
 
   const handleDelete = async (id, title) => {
-    // 处理删除按钮点击事件
+    // Handling Delete Button Click Events
     console.log('Delete button clicked for id:%d, title:%s', id, title);
-    // 弹出确认对话框
+    // Pop-up confirmation dialogue box
     const isConfirmed = window.confirm(`Are you sure to delete this seminar \n\n"${title}"? \n\n This is a cascading deletion, which will also delete the presenter of the event.`);
 
-    // 如果用户点击确认，则执行删除操作
+    // If the user clicks Confirm, the delete operation is performed
     if (isConfirmed) {
-        // 执行删除逻辑
-        // 可以调用删除用户的 API 或其他相应的操作
+        // Execute the deletion logic
+        // Call the API for deleting a user or other appropriate actions.
         const response = await axios.post('http://localhost:3001/event/delete', {id: id});
         console.log('Deleted ', response);
         refreshTable();
     } else {
-        // 用户点击取消，不执行删除操作
+        // The user clicks Cancel and does not perform the delete operation
         console.log('Cancelled');
     }
     
@@ -135,22 +135,22 @@ const PresenterTableComponent = ({data, refreshTable}) => {
         alert('Is Seminar is required');
         return;
       }
-      // 弹出确认对话框
+      // Pop-up confirmation dialogue box
       const isConfirmed = window.confirm('Are you sure to update this event?');
 
       if(isConfirmed){
-        // 发送update请求到服务器
+        // Send an update request to the server
         const response = await axios.post('http://localhost:3001/event/update', {formData,id:id}, {
             headers: {
                 'Content-Type': 'application/json',
             },
         });
 
-        // 处理update成功的逻辑
+        // Logic for handling a successful update
         console.log('Event updated:', response.data);
         refreshTable();
       } else {
-        // 用户点击取消，不执行删除操作
+        // The user clicks Cancel and does not perform the delete operation
         console.log('Cancelled');
     }
 

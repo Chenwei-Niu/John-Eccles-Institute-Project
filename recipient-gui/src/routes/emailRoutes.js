@@ -1,7 +1,7 @@
 // userRoutes.js
 
 const express = require('express');
-const { generateEmail,sendEmail } = require('../controllers/emailController.js');
+const { generateEmail,sendEmail } = require('../controllers/emailController');
 
 const router = express.Router();
 

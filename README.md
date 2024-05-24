@@ -15,67 +15,85 @@
 
 3. Make sure we have Python3.10+ installed
 
-4. Execute these code in terminal
+4. ### Install python dependencies:
 
-```bash
-pip install -U pip setuptools wheel
-pip install -U spacy
-python -m spacy download en_core_web_sm
-pip install sqlalchemy
-pip install psycopg2
-pip install schedule
-pip install datetime
-pip install nltk
-```
+   There are two ways of installing dependencies, 4.1 and 4.2 respectively, either one is okay.
+
+   4.1 Install via the single command:
+
+   ```bash
+   pip install -r "static/requirements.txt"
+   ```
+
+   4.2 Execute these code in terminal
+
+   ```bash
+   pip install -U pip setuptools wheel
+   pip install scrapy
+   pip install -U spacy
+   pip install sqlalchemy
+   pip install psycopg2
+   pip install schedule
+   pip install datetime
+   pip install bs4
+   pip install scholarly
+   pip install nltk
+   python -m spacy download en_core_web_lg
+   ```
+
+   
 
 5. Create a database for this project
 
-   - check if "PostgresSQL/[version_number]/bin" is in the "PATH"
+- check if "PostgresSQL/[version_number]/bin" is in the "PATH"
 
-   - open a terminal and type in ```pg_ctl -D "PostgresSQL/[version_number]/data"```
+- open a terminal and type in ```pg_ctl -D "PostgresSQL/[version_number]/data"```
 
-   - click enter until you are able to type in SQL commands
+- click enter until you are able to type in SQL commands
 
-     - type in  
+  - type in  
 
-       ```sql
-       -- Database: postgres
-       
-       -- DROP DATABASE IF EXISTS jei;
-       
-       CREATE DATABASE jei
-           WITH
-           OWNER = postgres
-           ENCODING = 'UTF8'
-           TABLESPACE = pg_default
-           CONNECTION LIMIT = -1
-           IS_TEMPLATE = False;
-       ```
+    ```sql
+    -- Database: postgres
+    
+    -- DROP DATABASE IF EXISTS jei;
+    
+    CREATE DATABASE jei
+        WITH
+        OWNER = postgres
+        ENCODING = 'UTF8'
+        TABLESPACE = pg_default
+        CONNECTION LIMIT = -1
+        IS_TEMPLATE = False;
+    ```
 
 6. Install backend dependencies:
-   ```bash
-   pip install uvicorn
-   pip install fastapi
-   ```
+
+```bash
+pip install uvicorn
+pip install fastapi
+```
 
 7. Run backend server:
-   ```
-   cd backend
-   uvicorn main:app --reload
-   ```
-   
+
+```
+cd backend
+uvicorn main:app --reload
+```
+
 8. Install npm packages
-   ```
-   cd frontend
-   npm i
-   ```
+
+```
+cd frontend
+npm i
+```
 
 9. Run the web server by the following command (read more information in frontend/README.md)
 
-   ```
-   cd frontend
-   npm run dev
-   ```
+```
+cd frontend
+npm run dev
+```
 
 10. cd into the project root directory, where "**scrapy.cfg**" locates, then cd into **scraper**
 

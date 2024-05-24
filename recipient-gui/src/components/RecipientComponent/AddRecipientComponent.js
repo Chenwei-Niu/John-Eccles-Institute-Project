@@ -15,7 +15,7 @@ const AddRecipientComponent = ({refreshTable}) => {
 
   const handleInsert = async () => {
     try {
-      // 验证邮箱是否存在
+      // Verify that the email address exists
       if (!formData.email) {
         alert('Email is required');
         return;
@@ -25,14 +25,14 @@ const AddRecipientComponent = ({refreshTable}) => {
         return;
       }
 
-      // 发送插入请求到服务器
+      // Send insert request to server
       const response = await axios.post('http://localhost:3001/users/insert', formData, {
         headers: {
             'Content-Type': 'application/json',
         },
       });
       
-      // 处理插入成功的逻辑
+      // Logic to handle insertion success
       console.log('User inserted:', response.data);
       refreshTable();
     } catch (error) {

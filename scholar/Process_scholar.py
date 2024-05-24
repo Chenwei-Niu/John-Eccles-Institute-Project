@@ -1,14 +1,10 @@
-import pandas as pd
 import time
-from typing import List
 import re
 from scholarly import scholarly, ProxyGenerator
-from backend.models import Recipient
 from backend.models import *
 from sqlalchemy.orm import sessionmaker
 import spacy
 
-nlp = spacy.load("en_core_web_sm")
 word2vector_nlp = spacy.load("en_core_web_lg")
 biography_formats = [
     r'Biography([\s\S]+)',
@@ -29,55 +25,6 @@ class Process_scholar:
         self.name_matcher = r'([\w]+)\.([\w]+)@([\w]+)\.edu\.au'
         engine = db_connect()
         self.Session = sessionmaker(bind=engine)
-
-    def remove_recipient_from_email(self, data: pd.DataFrame):  # add scholars from recipients list
-        session = self.Session()
-        db_lst = session.query(Recipient).all()
-        csv_lst = []
-        for index, row in data.iterrows():
-            csv_lst.append(session.query(Recipient).filter(Recipient.email == str(row[0])).first())
-
-        for i in db_lst:
-            if i not in csv_lst:
-                session.query(Recipient).filter(Recipient.email == i.email).delete()
-                try:
-                    session.commit()
-
-                except:
-                    session.rollback()
-                continue
-
-        session.close()
-
-    def add_recipient_from_email(self, data: pd.DataFrame):  # add scholars from recipients list
-
-        for index, row in data.iterrows():
-            session = self.Session()
-            recipient = Recipient()
-
-            recipient.email = str(row[0])
-            recipient.organization = str(row[1])
-            recipient.name = self.get_name_from_email(recipient.email)
-            recipient.interest = self.get_attributes(recipient.name, recipient.organization, "interests")
-            recipient.is_recipient = True  # Set to true, since theses scholars are from recipients list
-            # For scholar added from events, this attribute should be set to false
-            try:
-                session.add(recipient)
-                session.commit()
-
-            except:
-                session.rollback()
-                continue
-            finally:
-                session.close()
-
-    def get_name_from_email(self, email):
-        result = re.search(self.name_matcher, email, flags=re.IGNORECASE)
-        if result:
-            name = result.group(1) + " " + result.group(2)
-            return name
-        else:
-            return ""
 
     def get_candidates_by_name_and_org(self, name: str, organization: str, query_limit:int):
         if organization == "nan":
@@ -186,7 +133,7 @@ class Process_scholar:
                 biography = ' '.join(regexp_match)
                 break
 
-        parsed_biography = nlp(biography)
+        parsed_biography = word2vector_nlp(biography)
         possible_org_dict = {}
         for ent in parsed_biography.ents:
             length = len([i for i in university_feature_words if i in ent.text])
