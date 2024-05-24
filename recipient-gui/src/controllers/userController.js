@@ -90,7 +90,7 @@ const deleteUser = async (req, res) => {
 const fetchInterets = async (req, res) => {
     try {
       // 调用 Python 脚本进行查询
-      const pythonProcess = spawn('python', [path.join(__dirname,__script_dir,'interests_lookup.py')]);
+      const pythonProcess = spawn('python', [path.join(__dirname,__script_dir,'interests_lookup.py'), "recipient"]);
   
       pythonProcess.stdout.on('data', (data) => {
         const result = data.toString().trim();
@@ -134,8 +134,8 @@ async function insertRecipientFromJSON(data){
       const { name, email, organization, interest } = record;
 
       // check if email exists in this JSON record
-      if (!email) {
-        let errorMessage = `This record's Email is missing，gonna skip this record`;
+      if (!email || !email.toString().includes("@")) {
+        let errorMessage = `This record's Email is missing or invalid，gonna skip this record`;
         console.log(errorMessage);
         failedRecords.push({...record, msg:errorMessage});
         continue;
@@ -202,6 +202,8 @@ const insertUserInBulk = (req, res) => {
     } else if (err) {
       // other error
       res.status(500).send({ message: 'other error' });
+    } else if (req.file == null){
+      res.status(500).send({ message: 'No file was selected' });
     } else {
       // Read from the uploaded file
       const workbook = xlsx.readFile(req.file.path);

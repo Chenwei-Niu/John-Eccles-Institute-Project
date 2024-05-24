@@ -106,7 +106,8 @@ CONNECTION_STRING = "{drivername}://{user}:{passwd}@{host}:{port}/{db_name}".for
 # Setting for the key terms extractor
 # LINGUISTIC_FILTER: the linguistic filter, can be Noun or AdjNoun or AdjPrepNoun
 # MAX_LEN: the expected maximum length of a term
-# FREQUENCY_THRESHOLD: the frequency threshold
+# FREQUENCY_THRESHOLD: the frequency threshold. If the number of occurrences is lower than this threshold, 
+#                      it will not be considered as a key term.
 # C_VALUE_THRESHOLD: the C-value threshold
 
 LINGUISTIC_FILTER = "Noun"

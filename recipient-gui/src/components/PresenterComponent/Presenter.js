@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import SearchComponent from '../SearchComponent';
 import PresenterTableComponent from './PresenterTableComponent';
 import AddPresenterComponent from './AddPresenterComponent';
+import FetchInterestsButton from './FetchPresenterInterestsComponent';
 import axios from 'axios';
 
 function Presenter() {
@@ -40,6 +41,7 @@ function Presenter() {
         <h1>Presenter Management</h1>
         <SearchComponent onSearch={handleSearch} />
         <PresenterTableComponent data={filteredData.length > 0 ? filteredData : originalData} refreshTable={fetchData}/>
+        <FetchInterestsButton refreshTable={fetchData}/>
         <AddPresenterComponent refreshTable={fetchData}/>
     </div>
   );

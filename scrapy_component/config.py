@@ -12,6 +12,7 @@ EVENTS_URLS = {
                 "speaker": "",
                 "date": '//div[@class="panel-pane pane-entity-field pane-node-field-date-time brd-label marginbottom"]/div/div/div//text()',
                 "venue": '//div[@class="panel-pane pane-entity-field pane-node-field-location marginbottom"]//p/text()',
+                'image_url':'//div[@class="panel-pane pane-views-panes pane-media-node-display-panel-pane-1 marginbottom"]//img/@src',
             }
         }
     },
@@ -23,10 +24,11 @@ EVENTS_URLS = {
             "event_item": './div[1]/a/@href',
             "event_info": {
                 "title": '//*[@id="page-title"]/text()',
-                "description": '//*[@id="block-system-main"]/div/div/div/div[1]/div/div[5]/div/div/div/div//text()',
+                "description": '//div[@class="panel-pane pane-node-body"]//text()',
                 "speaker": '',
                 "date": '//div[@class="panel-pane pane-entity-field pane-node-field-date-time brd-label marginbottom"]/div/div/div//text()',
                 "venue": '//div[@class="panel-pane pane-entity-field pane-node-field-location marginbottom"]//p/text()',
+                'image_url':'//div[@class="panel-pane pane-views-panes pane-media-node-display-panel-pane-1 marginbottom"]//img/@src',
             }
         }
     },
@@ -42,6 +44,7 @@ EVENTS_URLS = {
                 "speaker": '//*[@id="main-content"]/header/p[1]//text()',
                 "date": '//*[@id="main-content"]/header/div/div/article[1]//text()',
                 "venue": '//*[@id="main-content"]/header/div/div/article[2]//text()',
+                'image_url':'//*[@class="cover-image"]//img/@src',
             }
         }
     }

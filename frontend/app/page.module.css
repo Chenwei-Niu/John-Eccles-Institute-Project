@@ -2,20 +2,33 @@
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  align-items: center;
-  padding: 6rem;
+  /* align-items: center; */
+  padding: 0rem 4rem;
   min-height: 100vh;
   background-color: white;
+}
+
+.searchAndSeminarWrapper {
+  width: 100%;
 }
 
 .eventCard {
     /* margin-top: 30px; */
     /* margin-bottom: 30px; */
-    width: 100%;
+    /* width: 100%; */
     border-bottom: 1px solid;    
-    padding: 20px;
+    padding: 10px 10px;
+    
+}
+.eventCard p {
+  margin-top: 5px;
+  margin-bottom: 5px;
+  padding: 0px;
 }
 
+.eventCard .dateAndVenue {
+  display: inline;
+}
 .form {
   width: 100%;
 }
@@ -35,11 +48,165 @@
 }
 
 .ellipsisDescriptionContainer {
-  margin-top: 15px;
+  margin-top: 10px;
   width: 100%; /* 设置容器的宽度 */
   white-space: pre-wrap;
   /* white-space: nowrap; 防止文本换行 */
   overflow: hidden; /* 隐藏溢出的部分 */
   text-overflow: ellipsis; /* 显示省略号 */
   /* border: 1px solid #ccc; 可选：添加边框以突显容器 */
+}
+
+.buttonsField {
+  margin-top: 15px;
+  display: flex;
+  height: 30px;
+  justify-content: flex-start;
+}
+
+.cookieHostField {
+  display: inline-block;
+  width: 50%;
+
+  display: flex;
+  height: 30px;
+  justify-content: flex-end;
+}
+
+.subscribeField {
+  display: inline-block;
+  width: 50%;
+  display: flex;
+  height: 30px;
+  justify-content: flex-start;
+}
+
+.cookieInputForm{
+  
+  display: flex;
+  height: 30px;
+  justify-content: flex-end;
+}
+
+.cookieDisplay{
+  /* float: right; */
+  display: inline-block;
+  margin-right: 3px;
+  width:auto;
+}
+label.cookieDisplay{
+  line-height: 30px;
+}
+span.cookieDisplay{
+  display: inline-block;
+  min-width: 300px;
+  width: 100%;
+  height: 100%;
+  visibility: hidden;
+}
+input.cookieDisplay{
+    width: 100%;
+    height: 100%;
+    display: inline-block;
+    position: absolute;
+    left: 0;
+    top: 0;
+    border: 1px dashed #080808;
+}
+.addTag{
+  height: 28px;
+  position: relative;
+}
+
+.nomargintop {
+  margin-top: 0px !important;
+  height: 100%;
+}
+.nomarginbottom {
+  margin-bottom: 0px !important;
+}
+.padtop {
+  padding-top: 20px !important;
+  margin-top: 0 !important;
+}
+.padbottom {
+  padding-bottom: 20px !important;
+  margin-bottom: 0 !important;
+}
+.oneThird {
+  width: 29.1666%;
+  float: left;
+  margin: 20px;
+  display: table-cell;
+  vertical-align: middle;
+}
+
+.twoThird {
+  width: 62.5000%;
+  float: left;
+  margin: 20px;
+  display: inline;
+}
+.left {
+  float: left;
+}
+.right {
+  float: right;
+}
+
+.clear {
+  clear: both;
+}
+
+.tickBox {
+  width: 4.0000%;
+  margin-right: 10px;
+  display: table-cell;
+  vertical-align: middle;
+  margin-top: 4px;
+  margin-bottom: 5px;
+  
+}
+
+.infoBox {
+  width: 90%;
+}
+
+.backToTopBox{
+  position:fixed;
+  right:30px;
+  bottom: 30px;
+  height:40px;
+  width: 60px;    
+  text-align:center;
+  padding-top:25px;    
+  background-color: black;
+  border-radius: 20%;
+  overflow: hidden;
+}
+.backToTopBox:hover:before{
+  top:50%
+}
+.backToTopBox:hover .backToTopBoxIn{
+  visibility: hidden;
+}
+.backToTopBox:before{
+  position: absolute;
+  top: -50%;
+  left: 50%;
+  transform: translate(-50%,-50%);
+  content:'Back to Top';
+  width: 40px;
+  color:peru;
+  font-weight:bold;
+
+}    
+.backToTopBoxIn{
+  visibility: visible;
+  display:inline-block;
+  height:20px;
+  width: 20px;
+  border: 3px solid black;
+  border-color: white transparent transparent white;
+  transform:rotate(45deg);
 }

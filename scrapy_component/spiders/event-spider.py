@@ -9,7 +9,7 @@ import scrapy_component.items as items
 import spacy
 import re
 
-english_nlp = spacy.load('en_core_web_sm')
+english_nlp = spacy.load('en_core_web_lg')
 scholar_helper = Process_scholar()
 data_cleaner = Data_Cleaner()
 class EventSpider(scrapy.Spider):
@@ -32,22 +32,25 @@ class EventSpider(scrapy.Spider):
             # some urls do not include the domain, if there isn't a scheme and domain, we add it on
             if page_config["domain"] not in url:
                 url = page_config["domain"] + url
-            yield Request(url, callback=self.parse_event, meta={"event_info": page_config['xpath']['event_info'], "url":url, "curr_time":curr_time})
+            yield Request(url, callback=self.parse_event, meta={"event_info": page_config['xpath']['event_info'], "url":url, "curr_time":curr_time, "domain":page_config["domain"]})
 
     def parse_event(self, response):
         event_info = response.meta.get("event_info")
         title = response.xpath(event_info['title']).get()
-        description, is_seminar = self.get_description(response,event_info,title)
-        keywords = ", ".join(Keywords_extractor.extract_keywords(description))
+        abstract, description, is_seminar = self.get_description(response,event_info,title)
+        keywords = ", ".join(Keywords_extractor.extract_keywords(abstract))
         scholar_object = self.scholar_object(response,description,event_info,keywords,title)
+        url = response.meta.get("url")
+        image_url = data_cleaner.assemble_image_url(url,response.xpath(event_info['image_url']).get(),response.meta.get("domain"))
         event_data = {
             "title": title,
-            "description": description.strip(),
+            "description": abstract.strip(),
             "date": ''.join(response.xpath(event_info['date']).extract()),
             "venue": response.xpath(event_info['venue']).get(),
             "keywords":keywords,
             "organization": scholar_object['organization'],
-            "url":response.meta.get("url"),
+            "url":url,
+            "image_url": image_url,
             "access_date": response.meta.get("curr_time"),
             "is_seminar": is_seminar
         }
@@ -69,7 +72,7 @@ class EventSpider(scrapy.Spider):
         else:
             description = ''.join(description)
         is_seminar = self.determine_event_type(description,title) # Determine whether this event is a seminar
-        return Keywords_extractor.getAbstract(description), is_seminar
+        return Keywords_extractor.getAbstract(description), description, is_seminar
     
     def get_speaker(self, response, description, event_info,title):
         # if there is a presenter HTML tag, then use it
@@ -107,10 +110,11 @@ class EventSpider(scrapy.Spider):
                 # if the dictionary doesn't contain the name, and the text doesn't contain numbers,
                 # then add it into the dictionary
                 if entity.text not in temp_dict and not bool(re.search(r'\d',entity.text)):
-                    temp_dict[entity.text] = 2 if entity.text.count(" ") == 1 else 1 
+                    temp_dict[entity.text] = 3 if entity.text.count(" ") == 1 else 1 # Give name with two words the highest priority
         
         if len(temp_dict) != 0:
-            return max(temp_dict, key= temp_dict.get)
+            scholar_name = max(temp_dict, key= temp_dict.get)
+            return data_cleaner.clean_presenter_name(scholar_name)
         else:
             return "None"
     
@@ -132,12 +136,18 @@ class EventSpider(scrapy.Spider):
 
     def scholar_object(self,response,description:str,event_info,keywords,title):
         name = self.get_speaker(response,description,event_info,title)
-        
-        # try: # Scholarly: exceeding maximum number of tries, the Google Scholar tempororily banned current IP
-        #     scholar = scholar_helper.get_scholar_instance(name,keywords)
-        # except:
-        #     scholar = {}
-        scholar = {} # Test purpose only, delete after test
+        if self.mode == "scholarly":
+            print("\nScholarly is invoked")
+            try: # Scholarly: exceeding maximum number of tries, the Google Scholar tempororily banned current IP
+                scholar = scholar_helper.get_scholar_instance(name,keywords)
+                print("scholar is:", scholar)
+            except:
+                scholar = {}
+                print("An exception occured when using Scholarly -- search_author() or scholarly.next(Author)")
+        elif self.mode == "default":
+            scholar = {}
+        else:
+            scholar = {}
 
         if (len(scholar) == 0): # cannot search such a person on Google Scholar
             organization = scholar_helper.get_organization(description)

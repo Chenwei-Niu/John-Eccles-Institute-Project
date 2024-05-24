@@ -1,9 +1,14 @@
 from backend.models import *
 import spacy
-
+from queue import PriorityQueue as PQ
+import os
+os.environ['TF_ENABLE_ONEDNN_OPTS'] = '0' # To suppress the automatic warning from Tensorflow
 word2vector_nlp = spacy.load("en_core_web_lg")
-threshold = 0.75
+threshold = 0.775 # used in getSeminarsOfPossibleInterest() function, 
+                 # used for newletter generation
 
+webpage_priority_threshold = 0.7 # used in get_priority_seminars_by_interests() function,
+                                # used for newletter generation
 
 class RecommenderSystem:
     def __init__(self):
@@ -16,16 +21,18 @@ class RecommenderSystem:
         def loopEachRecipient():
             for interest in recipient.interest:
                 for keyword in presenter_interest_and_keywords:
-                    search_doc = word2vector_nlp(interest)
-                    main_doc = word2vector_nlp(keyword)
-                    simi = search_doc.similarity(main_doc)
-                    if simi > threshold:
-                        print(recipient.name + ": " + interest + ", " + keyword + ", " + str(simi))
-                        if interested_seminar_dict.get(recipient.id):
-                            interested_seminar_dict.get(recipient.id).append(event.id)
-                        else:
-                            interested_seminar_dict[recipient.id] = [event.id]
-                        return
+                    search_doc = word2vector_nlp(interest.lower())
+                    main_doc = word2vector_nlp(keyword.lower())
+                    if search_doc and search_doc.vector_norm: # Make sure search_doc is not None
+                        if main_doc and main_doc.vector_norm: # Make sure main_doc is not None
+                            simi = search_doc.similarity(main_doc)
+                            if simi > threshold:
+                                print(recipient.name + ": " + interest + ", " + keyword + ", " + str(simi))
+                                if interested_seminar_dict.get(recipient.id):
+                                    interested_seminar_dict.get(recipient.id).append(event.id)
+                                else:
+                                    interested_seminar_dict[recipient.id] = [event.id]
+                                return
 
         event_lst = (self.db.query(Event.id, Event.title, Event.keywords, Scholar.interest).join(Scholar).filter(
             Event.speaker == Scholar.id).all())
@@ -41,3 +48,30 @@ class RecommenderSystem:
 
         print(interested_seminar_dict)
         return interested_seminar_dict
+    
+    def get_priority_seminars_by_interests(self, interests:str):
+        # Helper function to be used later
+        def loopInterests():
+            for interest in interests_list:
+                for keyword in presenter_interest_and_keywords:
+                    search_doc = word2vector_nlp(interest.lower())
+                    main_doc = word2vector_nlp(keyword.lower())
+                    if search_doc and search_doc.vector_norm: # Make sure search_doc is not None
+                        if main_doc and main_doc.vector_norm: # Make sure main_doc is not None
+                            simi = search_doc.similarity(main_doc)
+                            if simi > webpage_priority_threshold:
+                                print( interest + ", " + keyword + ", " + str(simi))
+                                pq.put((simi,event.id))
+                                return
+
+        event_lst = (self.db.query(Event.id, Event.title, Event.keywords, Scholar.interest).join(Scholar).filter(
+            Event.speaker == Scholar.id).all())
+        pq = PQ()
+        interests_list = [x.strip() for x in interests.split(',')]
+        for event in event_lst:
+            print(event.title)
+            presenter_interest_and_keywords = []
+            presenter_interest_and_keywords = event.keywords.split(",") + event.interest
+            loopInterests()
+            
+        return pq

@@ -3,6 +3,7 @@ import datetime
 import os
 from scrapy import cmdline
 import time
+import sys
 import pandas as pd
 from scholar import Process_scholar
 from email_component.email_main import *
@@ -17,7 +18,13 @@ Once finished, with a printed string indicating the end of current crawling
 
 def execute_crawler():
     print("Crawl start: " + str(datetime.datetime.now()))
-    os.system("scrapy crawl event-spider")
+    if len(sys.argv) > 1 and sys.argv[1] == "-s": # s means Scholarly, fetch speakers interests while crawling seminars
+        print("scrapy crawl event-spider -a mode=scholarly")
+        os.system("scrapy crawl event-spider -a mode=scholarly")
+    else:
+        print("scrapy crawl event-spider -a mode=default")
+        os.system("scrapy crawl event-spider -a mode=default") # default mode will not fetch speakers interests using Scholarly
+                                                               # to avoid being banned by Google Scholar and interrupt the whole crawling process.
     print("Crawl finished: " + str(datetime.datetime.now()))
 
 

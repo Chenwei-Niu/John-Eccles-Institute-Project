@@ -2,6 +2,7 @@
 const { spawn } = require('child_process');
 const {pool} = require('../models/db'); // 使用你的数据库连接配置
 const path = require('path');
+const __script_dir = "python_scripts";
 
 const insertPresenter = async (req, res) => {
   try {
@@ -79,11 +80,39 @@ const deletePresenter = async (req, res) => {
         }
     }
 }
+
+const fetchPresenterInterets = async (req, res) => {
+  try {
+    // invoke Python script to fetch
+    const pythonProcess = spawn('python', [path.join(__dirname,__script_dir,'interests_lookup.py'), "presenter"]);
+
+    pythonProcess.stdout.on('data', (data) => {
+      const result = data.toString().trim();
+      // process the result，Can be returned to the front end or perform other operations
+      res.json({ message: 'Interests fetched successfully', result });
+    });
+
+    pythonProcess.stderr.on('data', (data) => {
+      console.error(`Error in Python script: ${data}`);
+      res.status(500).json({ error: 'Internal Server Error' });
+    });
+
+    pythonProcess.on('close', (code) => {
+      if (code !== 0) {
+        res.status(500).json({ error: 'Internal Server Error' });
+      }
+    });
+  } catch (error) {
+    console.error('Error fetching interests', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+};
   
 
 module.exports = {
   fetchPresenterData,
   deletePresenter,
   updatePresenter,
-  insertPresenter
+  insertPresenter,
+  fetchPresenterInterets
 };
