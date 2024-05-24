@@ -38,6 +38,8 @@
    pip install bs4
    pip install scholarly
    pip install nltk
+   pip install uvicorn
+   pip install fastapi
    python -m spacy download en_core_web_lg
    ```
 
@@ -67,21 +69,14 @@
         IS_TEMPLATE = False;
     ```
 
-6. Install backend dependencies:
-
-```bash
-pip install uvicorn
-pip install fastapi
-```
-
-7. Run backend server:
+7. Run website's backend server:
 
 ```
 cd backend
 uvicorn main:app --reload
 ```
 
-8. Install npm packages
+8. Install npm packages required for website front end
 
 ```
 cd frontend
