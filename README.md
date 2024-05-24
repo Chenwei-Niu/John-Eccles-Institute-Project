@@ -2,7 +2,7 @@
 
 ## Prepare Linux environment
 
-1. Install PostgresSQL server
+1. Install PostgreSQL server
 
    ```bash
    sudo sh -c 'echo "deb http://apt.postgresql.org/pub/repos/apt $(lsb_release -cs)-pgdg main" > /etc/apt/sources.list.d/pgdg.list'
@@ -13,7 +13,7 @@
 
 2. Install Node.js (18.16.0) through this website https://nodejs.org/en/download/package-manager
 
-3. Make sure we have Python3.6+ installed
+3. Make sure we have Python3.10+ installed
 
 4. Execute these code in terminal
 
@@ -70,9 +70,10 @@ pip install nltk
    npm i
    ```
 
-9. Run the web server by the following command in the frontend dir (read more about it in frontend/README)
+9. Run the web server by the following command (read more information in frontend/README.md)
 
    ```
+   cd frontend
    npm run dev
    ```
 
