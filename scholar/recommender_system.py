@@ -4,10 +4,10 @@ from queue import PriorityQueue as PQ
 import os
 os.environ['TF_ENABLE_ONEDNN_OPTS'] = '0' # To suppress the automatic warning from Tensorflow
 word2vector_nlp = spacy.load("en_core_web_lg")
-threshold = 0.775 # used in getSeminarsOfPossibleInterest() function, 
+threshold = 0.725 # used in getSeminarsOfPossibleInterest() function, 
                  # used for newletter generation
 
-webpage_priority_threshold = 0.7 # used in get_priority_seminars_by_interests() function,
+webpage_priority_threshold = 0.725 # used in get_priority_seminars_by_interests() function,
                                 # used for newletter generation
 
 class RecommenderSystem:

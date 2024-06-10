@@ -19,7 +19,7 @@ const GenerateEmailComponent = ({refreshTable}) => {
       console.log(response.data);
       alert('Sending emails to recipients.');
     } catch (error) {
-      console.error('Error generating verification email', error);
+      console.error('Error sending email', error);
     }
   };
 

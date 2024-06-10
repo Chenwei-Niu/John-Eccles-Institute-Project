@@ -12,11 +12,14 @@ const generateEmail = async (req, res) => {
         // Process query results, which can be returned to the front end or perform other operations
         res.json({ message: 'Email generates successfully', result });
       });
-  
-      pythonProcess.stderr.on('data', (data) => {
-        console.error(`Error in Python script: ${data}`);
-        res.status(500).json({ error: 'Internal Server Error' });
-      });
+
+      // The following block was commented because the irrepressible warnings from Tensorflow will always trigger it
+      // Warning is :The name tf.losses.sparse_softmax_cross_entropy is deprecated. Please use tf.compat.v1.losses.sparse_softmax_cross_entropy instead.
+
+      // pythonProcess.stderr.on('data', (data) => {
+      //   console.error(`Error in Python script: ${data}`);
+      //   res.status(500).json({ error: 'Internal Server Error' });
+      // });
   
       pythonProcess.on('close', (code) => {
         if (code !== 0) {
@@ -40,10 +43,13 @@ const sendEmail = async (req, res) => {
       res.json({ message: 'Send Emails', result });
     });
 
-    pythonProcess.stderr.on('data', (data) => {
-      console.error(`Error in Python script: ${data}`);
-      res.status(500).json({ error: 'Internal Server Error' });
-    });
+    // The following block was commented because the irrepressible warnings from Tensorflow will always trigger it
+    // Warning is :The name tf.losses.sparse_softmax_cross_entropy is deprecated. Please use tf.compat.v1.losses.sparse_softmax_cross_entropy instead.
+
+    // pythonProcess.stderr.on('data', (data) => {
+    //   console.error(`Error in Python script: ${data}`);
+    //   res.status(500).json({ error: 'Internal Server Error' });
+    // });
 
     pythonProcess.on('close', (code) => {
       if (code !== 0) {
