@@ -1,6 +1,6 @@
 // presenterController.
 const { spawn } = require('child_process');
-const {pool} = require('../models/db'); // 使用你的数据库连接配置
+const {pool} = require('../models/db');
 const path = require('path');
 const __script_dir = "python_scripts";
 
@@ -17,7 +17,7 @@ const insertPresenter = async (req, res) => {
         interestArray = '{}';
     }
 
-    // 在数据库中插入用户数据
+    // Insert user data into database
     const result = await pool.query(
       'INSERT INTO scholar ( name, organization, google_scholar_id, interest) VALUES ($1, $2, $3, $4) RETURNING *',
       [ name, organization, google_scholar_id, interestArray]
