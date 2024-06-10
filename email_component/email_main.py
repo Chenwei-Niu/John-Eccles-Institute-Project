@@ -20,8 +20,8 @@ class EmailMain:
         engine = db_connect()
         email_session = sessionmaker(bind=engine)
         self.db = email_session()
-        self.GMAIL_USERNAME = "1126niuchenwei"
-        self.GMAIL_APP_PASSWORD = "xtwmjekajpzzfike"
+        self.GMAIL_USERNAME = "jei.seminars.bot"
+        self.GMAIL_APP_PASSWORD = "zrgwneklkjoomdra"
         self.email_text = f"""
             Hi! This is the report from our script.
             
