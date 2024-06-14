@@ -1,4 +1,4 @@
-SPIDER_NAME = "event-spider"
+SPIDER_NAME = "event_spider"
 EVENTS_URLS = {
     "medical school anu": {
         "domain": "https://medicalschool.anu.edu.au",

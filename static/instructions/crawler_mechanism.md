@@ -28,13 +28,13 @@ This file contains many useful properties and parameters adjusting the performan
 
 ![image-20231017074908515](../readme_images/crawler_mechanism_4.png)
 
-### 1.2.3 scrapy_component/spiders/event-spider
+### 1.2.3 scrapy_component/spiders/event_spider
 
 In this file, class **EventSpider** will be instantiated during the crawling, and it would execute **start_request()**, **parse_event_list()**, and **parse_event()** in sequence. This spider object could firstly fetch all target websites in config.py, and for each website fetch the list of events, then parse the event and store the event into database. This class also fetch and store the presenter's key information and interested research areas based on their Google Scholar profile. This process should take several minutes.
 
 ### 1.2.4 scrapy_component/items
 
-The class **ScrapyComponentItem** wraps information we want to convey from `event-spider.py` to `pipelines.py`
+The class **ScrapyComponentItem** wraps information we want to convey from `event_spider.py` to `pipelines.py`
 
 ### 1.2.5 scrapy_component/pipelines
 
