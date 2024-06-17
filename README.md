@@ -13,7 +13,7 @@
 
 2. Install Node.js (18.16.0) through this website https://nodejs.org/en/download/package-manager
 
-3. Make sure we have Python3.10+ installed
+3. Make sure we have Python3.10.x installed, if you use the latest Python like 3.12.x, there might be some incompatible issues.
 
 4. ### Install python dependencies:
 
@@ -69,6 +69,20 @@
         IS_TEMPLATE = False;
     ```
 
+6. Install nltk resource 'punkt'
+
+   - Open the terminal, type in "python" and click enter, then you entered the python interactive running environment
+
+   - Type in
+
+     ```python
+     import nltk
+     nltk.download('punkt')
+     nltk.download('averaged_perceptron_tagger')
+     ```
+
+     
+
 7. Run website's backend server:
 
 ```
@@ -107,8 +121,6 @@ npm run dev
    The default crawl time is 17:00 on each Wednesday. You are free to change it in **schedule_execute.py** file.
 
 12. We strongly recommend you to install a GUI for PostgresSQL called pgAdmin if you are unfamiliar with writing SQL commands.
-
-
 
 ### Unhappy about the extracted keywords?
 
