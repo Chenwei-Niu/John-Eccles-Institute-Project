@@ -221,3 +221,9 @@ For open source projects, say how it is licensed.
 
 ## Project status
 If you have run out of energy or time for your project, put a note at the top of the README saying that development has slowed down or stopped completely. Someone may choose to fork your project or volunteer to step in as a maintainer or owner, allowing your project to keep going. You can also make an explicit request for maintainers.
+# John-Eccles-Institute-Project
+Chenwei Niu's Personal Supervised Project.
+
+An Automated Seminar Collecting, Demonstrating, and Promoting System for ANU John Eccles Institute of Neuroscience 
+
+**Since the project codebase is related to the security of the project and the college, it cannot be open source, but posters and detailed reports about the project can be found in this repository.**
