@@ -1,4 +1,14 @@
-# How to deploy the JEI system
+# John Eccles Institute Project
+
+
+
+Chenwei Niu's Personal Supervised Project.
+
+An Automated Seminar Collecting, Demonstrating, and Promoting System for ANU John Eccles Institute of Neuroscience
+
+
+
+## How to deploy the JEI system
 
 ## Prepare Linux environment
 
